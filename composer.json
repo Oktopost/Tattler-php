@@ -1,0 +1,30 @@
+{
+  "name": "oktopost/tattler-php",
+  "description": "PHP Tattler client",
+  "type": "library",
+  "require": {
+    "php": ">=5.6-stable",
+    "00f100/uuid": "4.0.0",
+    "oktopost/objection": "^1.0",
+    "oktopost/skeleton": "^1.0"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Daniel Podrabinek",
+      "email": "dpodrabinek@oktopost.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-0": {
+      "Tattler": "src"
+    }
+  },
+  "suggest": {
+    "predis/predis": "Store users/channels tokens in Redis DB",
+    "oktopost/squid": "Store users/channels tokens in MySQL DB",
+    "guzzlehttp/guzzle": "Communicate with Tattler backend through guzzle (optional, by default CURL will be used)",
+    "nategood/httpful": "Communicate with Tattler backend through httpful (optional, by default CURL will be used)"
+  }
+}
