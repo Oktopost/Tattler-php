@@ -78,7 +78,13 @@
         type = type.toUpperCase();
 
         if(type === 'GET') {
-            url+='?'+serialize(data);
+            var glue = '?';
+
+            if (url.match(/\?/)) {
+                glue = '&';
+            }
+
+            url += glue + serialize(data);
             data = '';
         } else {
             data = JSON.stringify(data);
