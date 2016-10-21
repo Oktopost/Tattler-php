@@ -117,10 +117,9 @@ class RedisDecorator implements IDBDecorator
 
     /**
      * @param string $userToken
-     * @param int    $afterLockTTL
      * @return bool|TattlerAccess[]
      */
-    public function loadAllChannels($userToken, $afterLockTTL)
+    public function loadAllChannels($userToken)
     {
         $tmpAccess = new TattlerAccess();
         $tmpAccess->UserToken = $userToken;
@@ -130,20 +129,20 @@ class RedisDecorator implements IDBDecorator
             return false;
 
         $result = Mapper::getObjectsFrom(TattlerAccess::class, $data);
+        $locked = [];
 
         foreach($result as $key=>$value)
         {
             if ($value->IsLocked)
             {
-                if (strtotime($value->Modified) > (strtotime('now') - 10)) {
-                    unset($result[ $key ]);
-                }
-                else
-                {
-                    $this->unlock($value);
-                    $result[$key]->IsLocked = false;
-                }
+                $locked[] = $value;
+                unset($result[$key]);
             }
+        }
+
+        foreach ($locked as $value)
+        {
+            $this->unlock($value);
         }
 
         return $result;

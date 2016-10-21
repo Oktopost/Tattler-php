@@ -87,26 +87,25 @@ class SquidDecorator implements IDBDecorator
 
     /**
      * @param string $userToken
-     * @param int    $dataTTL
-     * @return bool|TattlerAccess[]
+     * @return bool|\Tattler\Objects\TattlerAccess[]
      */
-    public function loadAllChannels($userToken, $dataTTL)
+    public function loadAllChannels($userToken)
     {
         $result = $this->db->loadAllByField('UserToken', $userToken);
+        $locked = [];
 
         foreach($result as $key=>$value)
         {
             if ($value->IsLocked)
             {
-                if (strtotime($value->Modified) > (strtotime('now') - 10)) {
-                    unset($result[ $key ]);
-                }
-                else
-                {
-                    $this->unlock($value);
-                    $result[$key]->IsLocked = false;
-                }
+                $locked[] = $value;
+                unset($result[$key]);
             }
+        }
+
+        foreach($locked as $item)
+        {
+            $this->unlock($item);
         }
 
         return $result;

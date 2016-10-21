@@ -79,7 +79,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         $result = [];
 
         /** @var TattlerAccess[] $query */
-        $query = $this->decorator->loadAllChannels($userToken, self::DATA_TTL);
+        $query = $this->decorator->loadAllChannels($userToken);
 
         if (!$query)
             return $result;
@@ -108,7 +108,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         $result = [];
 
         /** @var TattlerAccess[] $query */
-        $query = $this->decorator->loadAllChannels($userToken, self::DATA_TTL);
+        $query = $this->decorator->loadAllChannels($userToken);
 
         if (!$query)
             return $result;

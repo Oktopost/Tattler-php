@@ -38,10 +38,9 @@ interface IDBDecorator
 
     /**
      * @param string $userToken
-     * @param int $afterLockTTL
      * @return bool|TattlerAccess[]
      */
-    public function loadAllChannels($userToken, $afterLockTTL);
+    public function loadAllChannels($userToken);
 
     /**
      * @param TattlerAccess $access

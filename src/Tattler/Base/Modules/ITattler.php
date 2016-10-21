@@ -32,7 +32,7 @@ interface ITattler
 
     /**
      * @param IUser $user
-     * @return IChannel[]
+     * @return IChannel[]|[]
      */
     public function getSavedChannels(IUser $user);
 

@@ -96,7 +96,7 @@ class Tattler implements ITattler
 
     /**
      * @param IUser $user
-     * @return IChannel[]
+     * @return IChannel[]|[]
      */
     public function getSavedChannels(IUser $user)
     {
@@ -105,7 +105,7 @@ class Tattler implements ITattler
 
     /**
      * @param array $filter
-     * @return \string[]
+     * @return string[]
      */
     public function getChannels(array $filter = [])
     {
