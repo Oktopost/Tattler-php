@@ -9,6 +9,7 @@ use Objection\LiteSetup;
  * @property string $Modified
  * @property string $UserToken
  * @property string $Channel
+ * @property bool   $IsLocked
  */
 class TattlerAccess extends LiteObject
 {
@@ -21,7 +22,8 @@ class TattlerAccess extends LiteObject
             'Created'   => LiteSetup::createString(),
             'Modified'  => LiteSetup::createString(),
             'UserToken' => LiteSetup::createString(),
-            'Channel'   => LiteSetup::createString()
+            'Channel'   => LiteSetup::createString(),
+            'IsLocked'  => LiteSetup::createBool()
         ];
     }
 

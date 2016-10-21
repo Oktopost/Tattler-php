@@ -25,4 +25,5 @@ class TattlerConfig extends LiteObject
             'Namespace' => LiteSetup::createString()
         ];
     }
+
 }

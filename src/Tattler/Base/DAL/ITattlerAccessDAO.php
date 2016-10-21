@@ -24,7 +24,7 @@ interface ITattlerAccessDAO
 
     /**
      * @param $userToken
-     * @return IChannel[]|[]
+     * @return IChannel[]
      */
     public function loadAllChannels($userToken);
 
@@ -33,6 +33,12 @@ interface ITattlerAccessDAO
      * @return array
      */
     public function loadAllChannelNames($userToken);
+
+    /**
+     * @param TattlerAccess $access
+     * @return bool
+     */
+    public function lock(TattlerAccess $access);
 
     /**
      * @param TattlerAccess $access

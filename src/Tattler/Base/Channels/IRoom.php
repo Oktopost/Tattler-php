@@ -10,5 +10,5 @@ interface IRoom extends IChannel
      * @param IUser $user
      * @return bool
      */
-    public function isAllowed(IUser $user);
+    public function lock(IUser $user);
 }

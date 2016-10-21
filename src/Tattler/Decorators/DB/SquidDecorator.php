@@ -86,12 +86,30 @@ class SquidDecorator implements IDBDecorator
     }
 
     /**
-     * @param $userToken
-     * @return TattlerAccess[]|bool
+     * @param string $userToken
+     * @param int    $dataTTL
+     * @return bool|TattlerAccess[]
      */
-    public function loadAllChannels($userToken)
+    public function loadAllChannels($userToken, $dataTTL)
     {
-        return $this->db->loadAllByField('UserToken', $userToken);
+        $result = $this->db->loadAllByField('UserToken', $userToken);
+
+        foreach($result as $key=>$value)
+        {
+            if ($value->IsLocked)
+            {
+                if (strtotime($value->Modified) > (strtotime('now') - 10)) {
+                    unset($result[ $key ]);
+                }
+                else
+                {
+                    $this->unlock($value);
+                    $result[$key]->IsLocked = false;
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -107,5 +125,27 @@ class SquidDecorator implements IDBDecorator
             ->from($this->tableName)
             ->where('Modified <= ?', [$date->format('Y-m-d H:i:s')])
         ->executeDml();
+    }
+
+    /**
+     * @param TattlerAccess $access
+     * @return bool
+     */
+    public function lock(TattlerAccess $access)
+    {
+        return $this->db->updateByFields([
+            'IsLocked' => 1
+        ], $this->getAccessFields($access));
+    }
+
+    /**
+     * @param TattlerAccess $access
+     * @return bool
+     */
+    public function unlock(TattlerAccess $access)
+    {
+        return $this->db->updateByFields([
+            'IsLocked' => 0
+        ], $this->getAccessFields($access));
     }
 }

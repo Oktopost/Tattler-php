@@ -40,6 +40,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
 
         if ($exists)
         {
+            $this->decorator->unlock($access);
             return $this->decorator->updateAccessTTL($access, self::DATA_TTL);
         }
         else
@@ -78,13 +79,17 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         $result = [];
 
         /** @var TattlerAccess[] $query */
-        $query = $this->decorator->loadAllChannels($userToken);
+        $query = $this->decorator->loadAllChannels($userToken, self::DATA_TTL);
 
         if (!$query)
             return $result;
 
+        /** @var TattlerAccess $item */
         foreach ($query as $item)
         {
+            if ($item->IsLocked)
+                continue;
+
             /** @var IRoom $room */
             $room = Common::skeleton(IRoom::class);
             $room->setName($item->Channel);
@@ -103,17 +108,30 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         $result = [];
 
         /** @var TattlerAccess[] $query */
-        $query = $this->decorator->loadAllChannels($userToken);
+        $query = $this->decorator->loadAllChannels($userToken, self::DATA_TTL);
 
         if (!$query)
             return $result;
 
+        /** @var TattlerAccess $item */
         foreach ($query as $item)
         {
+            if ($item->IsLocked)
+                continue;
+
             $result[] = $item->Channel;
         }
 
         return $result;
+    }
+
+    /**
+     * @param TattlerAccess $access
+     * @return bool
+     */
+    public function lock(TattlerAccess $access)
+    {
+        return $this->decorator->lock($access);
     }
 
     /**

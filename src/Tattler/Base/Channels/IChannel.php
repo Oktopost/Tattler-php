@@ -29,4 +29,10 @@ interface IChannel
      * @return bool
      */
     public function deny(IUser $user);
+
+    /**
+     * @param IUser $user
+     * @return bool
+     */
+    public function isAllowed(IUser $user);
 }

@@ -37,10 +37,23 @@ interface IDBDecorator
     public function deleteAccess(TattlerAccess $access);
 
     /**
-     * @param $userToken
-     * @return TattlerAccess[]|bool
+     * @param string $userToken
+     * @param int $afterLockTTL
+     * @return bool|TattlerAccess[]
      */
-    public function loadAllChannels($userToken);
+    public function loadAllChannels($userToken, $afterLockTTL);
+
+    /**
+     * @param TattlerAccess $access
+     * @return bool
+     */
+    public function lock(TattlerAccess $access);
+
+    /**
+     * @param TattlerAccess $access
+     * @return bool
+     */
+    public function unlock(TattlerAccess $access);
 
     /**
      * @param int $maxTTL

@@ -49,4 +49,13 @@ class Broadcast implements IChannel
     {
         return false;
     }
+
+    /**
+     * @param IUser $user
+     * @return bool
+     */
+    public function isAllowed(IUser $user)
+    {
+        return true;
+    }
 }

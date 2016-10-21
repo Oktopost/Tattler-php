@@ -96,7 +96,7 @@ class Tattler implements ITattler
 
     /**
      * @param IUser $user
-     * @return IChannel[]|[]
+     * @return IChannel[]
      */
     public function getSavedChannels(IUser $user)
     {
@@ -104,17 +104,25 @@ class Tattler implements ITattler
     }
 
     /**
-     * @return string[]
+     * @param array $filter
+     * @return \string[]
      */
-    public function getChannels()
+    public function getChannels(array $filter = [])
     {
-        return $this->syncChannels(array_merge(
+        $result = $this->syncChannels(array_merge(
             $this->accessDAO->loadAllChannelNames($this->currentUser->getName()),
             [
                 $this->currentUser->getName(),
                 Broadcast::BROADCAST_NAME
             ]
         ));
+
+        if ($filter)
+        {
+            return array_intersect($result, $filter);
+        }
+
+        return $result;
     }
 
     /**

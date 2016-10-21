@@ -30,6 +30,7 @@ class Room implements IRoom
         $access = new TattlerAccess();
         $access->Channel = $this->getName();
         $access->UserToken = $userToken;
+        $access->IsLocked = false;
 
         return $access;
     }
@@ -83,5 +84,14 @@ class Room implements IRoom
     public function isAllowed(IUser $user)
     {
         return $this->accessDAO->exists($this->getAccessObject($user->getName()));
+    }
+
+    /**
+     * @param IUser $user
+     * @return bool
+     */
+    public function lock(IUser $user)
+    {
+        return $this->accessDAO->lock($this->getAccessObject($user->getName()));
     }
 }

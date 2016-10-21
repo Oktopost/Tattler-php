@@ -7,7 +7,7 @@ use Closure;
 /**
  * Interface IUser
  */
-interface IUser extends IRoom
+interface IUser extends IChannel
 {
     /**
      * @param Closure $callback
