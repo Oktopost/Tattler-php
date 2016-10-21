@@ -29,7 +29,9 @@ interface ITattlerMessage
     public function setPayload(array $payload);
 
     /**
+     * @param array $filter
+     * @param array $exclude
      * @return array
      */
-    public function toArray();
+    public function toArray(array $filter = [], array $exclude = []);
 }

@@ -58,15 +58,17 @@ class TattlerMessage extends LiteObject implements ITattlerMessage
     }
 
     /**
+     * @param array $filter
+     * @param array $exclude
      * @return array
      */
-    public function toArray()
+    public function toArray(array $filter = [], array $exclude = [])
     {
         if ($this->namespace == null)
         {
             $this->namespace = ITattlerMessage::DEFAULT_NAMESPACE;
         }
 
-        return parent::toArray();
+        return parent::toArray($filter, $exclude);
     }
 }
