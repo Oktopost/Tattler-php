@@ -7,6 +7,9 @@ namespace Tattler\Base\Objects;
  */
 interface ITattlerMessage
 {
+    const DEFAULT_NAMESPACE = 'global';
+
+
     /**
      * @param $handler
      * @return static

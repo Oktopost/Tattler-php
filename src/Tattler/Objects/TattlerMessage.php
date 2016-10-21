@@ -56,4 +56,17 @@ class TattlerMessage extends LiteObject implements ITattlerMessage
         $this->payload = $payload;
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        if ($this->namespace == null)
+        {
+            $this->namespace = ITattlerMessage::DEFAULT_NAMESPACE;
+        }
+
+        return parent::toArray();
+    }
 }
