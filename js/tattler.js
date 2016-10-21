@@ -94,6 +94,16 @@
         return xmlhttp.send(data);
     }
 
+    function isEmpty(obj) {
+        for(var prop in obj) {
+            if(obj.hasOwnProperty(prop))
+                return false;
+        }
+
+        return JSON.stringify(obj) === JSON.stringify({});
+    }
+
+
     var tattlerFactory = {
         getInstance: function(instanceName){
             return tattlerInstances[instanceName];
@@ -297,10 +307,25 @@
 
         var requestChannels = function() {
             var socketId = manufactory.socket.io.engine.id;
-            log('log', 'requesting channels with socketId='+socketId);
+            var savedChannels = [];
+
+            if(isEmpty(manufactory.channels)) {
+                log('log', 'requesting channels with socketId='+socketId);
+            } else {
+                log('log', 'reconnecting to saved channels');
+                for(var room in manufactory.channels) {
+                    if(manufactory.channels.hasOwnProperty(room)) {
+                        savedChannels.push(room);
+                    }
+                }
+            }
+
             ajax(settings.requests.channels,
                 settings.urls.channels,
-                {socketId: socketId},
+                {
+                    socketId: socketId,
+                    channels: savedChannels
+                },
                 callbacks.getChannels.onSuccess,
                 callbacks.getChannels.onError);
         };
