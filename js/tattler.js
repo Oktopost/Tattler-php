@@ -334,6 +334,7 @@
         init();
 
         this['addHandler'] = addHandler;
+        this['addChannel'] = addChannel;
     };
 
     window.tattlerFactory = tattlerFactory;
