@@ -31,6 +31,12 @@ interface ITattler
     public function getHttpAddress();
 
     /**
+     * @param IUser $user
+     * @return IChannel[]|[]
+     */
+    public function getSavedChannels(IUser $user);
+
+    /**
      * @return string[]
      */
     public function getChannels();

@@ -2,6 +2,7 @@
 
 
 use Tattler\Common;
+use Tattler\Base\Channels\IRoom;
 use Tattler\Base\DAL\ITattlerAccessDAO;
 use Tattler\Base\Decorators\IDBDecorator;
 use Tattler\Objects\TattlerAccess;
@@ -68,12 +69,36 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         return $this->decorator->deleteAccess($access);
     }
 
+    /**
+     * @param $userToken
+     * @return IRoom[]|[]
+     */
+    public function loadAllChannels($userToken)
+    {
+        $result = [];
+
+        /** @var TattlerAccess[] $query */
+        $query = $this->decorator->loadAllChannels($userToken);
+
+        if (!$query)
+            return $result;
+
+        foreach ($query as $item)
+        {
+            /** @var IRoom $room */
+            $room = Common::skeleton(IRoom::class);
+            $room->setName($item->Channel);
+            $result[] = $room;
+        }
+
+        return $result;
+    }
 
     /**
      * @param string $userToken
      * @return array
      */
-    public function loadAllChannelsNames($userToken)
+    public function loadAllChannelNames($userToken)
     {
         $result = [];
 

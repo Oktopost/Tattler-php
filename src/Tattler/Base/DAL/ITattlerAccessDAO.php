@@ -1,6 +1,7 @@
 <?php
 namespace Tattler\Base\DAL;
 
+use Tattler\Base\Channels\IChannel;
 use Tattler\Objects\TattlerAccess;
 
 
@@ -23,9 +24,15 @@ interface ITattlerAccessDAO
 
     /**
      * @param $userToken
+     * @return IChannel[]|[]
+     */
+    public function loadAllChannels($userToken);
+
+    /**
+     * @param $userToken
      * @return array
      */
-    public function loadAllChannelsNames($userToken);
+    public function loadAllChannelNames($userToken);
 
     /**
      * @param TattlerAccess $access

@@ -95,15 +95,26 @@ class Tattler implements ITattler
     }
 
     /**
+     * @param IUser $user
+     * @return IChannel[]|[]
+     */
+    public function getSavedChannels(IUser $user)
+    {
+        return $this->accessDAO->loadAllChannels($user->getName());
+    }
+
+    /**
      * @return string[]
      */
     public function getChannels()
     {
-        $channels = $this->accessDAO->loadAllChannelsNames($this->currentUser->getName());
-        $channels[] = $this->currentUser->getName();
-        $channels[] = Broadcast::BROADCAST_NAME;
-
-        return $this->syncChannels($channels);
+        return $this->syncChannels(array_merge(
+            $this->accessDAO->loadAllChannelNames($this->currentUser->getName()),
+            [
+                $this->currentUser->getName(),
+                Broadcast::BROADCAST_NAME
+            ]
+        ));
     }
 
     /**
