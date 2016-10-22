@@ -117,9 +117,10 @@ class RedisDecorator implements IDBDecorator
 
     /**
      * @param string $userToken
+     * @param bool   $unlock
      * @return bool|TattlerAccess[]
      */
-    public function loadAllChannels($userToken)
+    public function loadAllChannels($userToken, $unlock = true)
     {
         $tmpAccess = new TattlerAccess();
         $tmpAccess->UserToken = $userToken;
@@ -140,9 +141,10 @@ class RedisDecorator implements IDBDecorator
             }
         }
 
-        foreach ($locked as $value)
-        {
-            $this->unlock($value);
+        if ($unlock) {
+            foreach ($locked as $value) {
+                $this->unlock($value);
+            }
         }
 
         return $result;

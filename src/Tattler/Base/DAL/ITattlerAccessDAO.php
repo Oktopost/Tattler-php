@@ -23,16 +23,18 @@ interface ITattlerAccessDAO
     public function deny(TattlerAccess $access);
 
     /**
-     * @param $userToken
-     * @return IChannel[]
+     * @param      $userToken
+     * @param bool $unlock
+     * @return IChannel[]|[]
      */
-    public function loadAllChannels($userToken);
+    public function loadAllChannels($userToken, $unlock = true);
 
     /**
-     * @param $userToken
+     * @param      $userToken
+     * @param bool $unlock
      * @return array
      */
-    public function loadAllChannelNames($userToken);
+    public function loadAllChannelNames($userToken, $unlock = true);
 
     /**
      * @param TattlerAccess $access

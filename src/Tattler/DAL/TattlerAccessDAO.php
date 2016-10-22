@@ -71,15 +71,16 @@ class TattlerAccessDAO implements ITattlerAccessDAO
     }
 
     /**
-     * @param $userToken
+     * @param      $userToken
+     * @param bool $unlock
      * @return IRoom[]|[]
      */
-    public function loadAllChannels($userToken)
+    public function loadAllChannels($userToken, $unlock = true)
     {
         $result = [];
 
         /** @var TattlerAccess[] $query */
-        $query = $this->decorator->loadAllChannels($userToken);
+        $query = $this->decorator->loadAllChannels($userToken, $unlock);
 
         if (!$query)
             return $result;
@@ -87,9 +88,6 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         /** @var TattlerAccess $item */
         foreach ($query as $item)
         {
-            if ($item->IsLocked)
-                continue;
-
             /** @var IRoom $room */
             $room = Common::skeleton(IRoom::class);
             $room->setName($item->Channel);
@@ -101,14 +99,15 @@ class TattlerAccessDAO implements ITattlerAccessDAO
 
     /**
      * @param string $userToken
+     * @param bool   $unlock
      * @return array
      */
-    public function loadAllChannelNames($userToken)
+    public function loadAllChannelNames($userToken, $unlock = true)
     {
         $result = [];
 
         /** @var TattlerAccess[] $query */
-        $query = $this->decorator->loadAllChannels($userToken);
+        $query = $this->decorator->loadAllChannels($userToken, $unlock);
 
         if (!$query)
             return $result;
@@ -116,9 +115,6 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         /** @var TattlerAccess $item */
         foreach ($query as $item)
         {
-            if ($item->IsLocked)
-                continue;
-
             $result[] = $item->Channel;
         }
 

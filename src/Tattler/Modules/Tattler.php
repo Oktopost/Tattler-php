@@ -96,16 +96,17 @@ class Tattler implements ITattler
 
     /**
      * @param IUser $user
+     * @param bool  $unlock
      * @return IChannel[]|[]
      */
-    public function getSavedChannels(IUser $user)
+    public function getSavedChannels(IUser $user, $unlock = true)
     {
-        return $this->accessDAO->loadAllChannels($user->getName());
+        return $this->accessDAO->loadAllChannels($user->getName(), $unlock);
     }
 
     /**
      * @param array $filter
-     * @return string[]
+     * @return string[]|[]
      */
     public function getChannels(array $filter = [])
     {

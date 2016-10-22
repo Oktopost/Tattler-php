@@ -32,13 +32,14 @@ interface ITattler
 
     /**
      * @param IUser $user
+     * @param bool  $unlock
      * @return IChannel[]|[]
      */
-    public function getSavedChannels(IUser $user);
+    public function getSavedChannels(IUser $user, $unlock = true);
 
     /**
      * @param array $filter
-     * @return string[]
+     * @return string[]|[]
      */
     public function getChannels(array $filter = []);
 
