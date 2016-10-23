@@ -33,7 +33,8 @@ class GuzzleDecorator implements INetworkDecorator
     public function sendPayload(array $tattlerBag)
     {
         $request = new Request('POST', $tattlerBag['tattlerUri']);
-        return $this->client->sendAsync($request, ['json' => $tattlerBag['payload'] ]);
+        $promise = $this->client->sendAsync($request, ['json' => $tattlerBag['payload'] ]);
+        return $promise->wait(false);
     }
 
     /**
