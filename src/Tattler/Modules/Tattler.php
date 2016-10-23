@@ -105,22 +105,34 @@ class Tattler implements ITattler
     }
 
     /**
+     * @param IUser $user
+     * @return string[]
+     */
+    public function getDefaultChannels(IUser $user)
+    {
+        return [
+            $user->getName(),
+            Broadcast::BROADCAST_NAME
+        ];
+    }
+
+    /**
      * @param array $filter
      * @return string[]|[]
      */
-    public function getChannels(array $filter = [])
+    public function getChannels($filter = [])
     {
         $result = $this->syncChannels(array_merge(
             $this->accessDAO->loadAllChannelNames($this->currentUser->getName()),
-            [
-                $this->currentUser->getName(),
-                Broadcast::BROADCAST_NAME
-            ]
+            $this->getDefaultChannels($this->currentUser)
         ));
 
         if ($filter)
         {
-            return array_intersect($result, $filter);
+            return array_merge(
+                $this->getDefaultChannels($this->currentUser),
+                array_values(array_intersect($result, $filter))
+            );
         }
 
         return $result;

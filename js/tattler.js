@@ -10,6 +10,7 @@
             ws: 'get',
             channels: 'get'
         },
+        autoConnect: true,
         debug: false
     };
 
@@ -121,7 +122,9 @@
             getWs: {
                 onSuccess: function (data) {
                     manufactory.ws = data.ws;
-                    connectToSocket();
+                    if(settings.autoConnect === true) {
+                        connectToSocket();
+                    }
                 },
 
                 onError: function () {
@@ -132,7 +135,7 @@
                 onSuccess: function(data) {
                     for(var i in data.channels) {
                         if(data.channels.hasOwnProperty(i)) {
-                            addChannel(data.channels[i]);
+                            addChannel(data.channels[i], true);
                         }
                     }
                     callbacks.socket.handleEvents();
@@ -159,6 +162,7 @@
                         return;
                     }
 
+                    /** @namespace data.payload */
                     manufactory.socket.on('defaultEvent', function (data) {
                         var handler = data.handler;
                         var namespace = data.namespace || 'global';
@@ -182,6 +186,7 @@
             ws: null,
             channels: {},
             handlers: {
+                /** @namespace data.channel */
                 global: {
                     'console.log': function (data) {
                         if (typeof data.force !== 'undefined') {
@@ -219,8 +224,8 @@
                             }
                         }
                     },
-                    'addChannel': function (data) {
-                        addChannel(data.channel);
+                    'addChannel': function (data, state) {
+                        addChannel(data.channel, state);
                     },
                     'removeChannel': function (data) {
                         removeChannel(data.channel);
@@ -234,11 +239,16 @@
                 typeof manufactory.handlers[namespace][event] !== 'undefined';
         };
 
-        var addChannel = function(channel) {
-            if(typeof manufactory.channels[channel] === 'undefined' || manufactory.channels[channel] === false) {
-                log('info', 'joining channel ' + channel);
-                manufactory.channels[channel] = true;
-                manufactory.socket.emit('subscribe', channel);
+        var addChannel = function(channel, state) {
+            if(typeof manufactory.channels[channel] === 'undefined' || manufactory.channels[channel] !== state) {
+                manufactory.channels[channel] = state;
+
+                if(manufactory.socket !== null) {
+                    log('info', 'joining channel «' + channel + '»');
+                    manufactory.socket.emit('subscribe', channel);
+                } else {
+                    log('info', 'adding channel «' + channel + '»');
+                }
             } else {
                 log('error', 'channel «' + channel + '» already defined');
             }
@@ -299,10 +309,14 @@
         };
 
         var connectToSocket = function(){
-            log('info', 'connecting to socket at', manufactory.ws);
-            manufactory.socket = io(manufactory.ws);
-            manufactory.socket.on('connect', callbacks.socket.connected);
-            manufactory.socket.on('disconnect', callbacks.socket.disconnected);
+            if(manufactory.socket === null) {
+                log('info', 'connecting to socket at', manufactory.ws);
+                manufactory.socket = io(manufactory.ws);
+                manufactory.socket.on('connect', callbacks.socket.connected);
+                manufactory.socket.on('disconnect', callbacks.socket.disconnected);
+            } else {
+                log('error', 'socket already connected');
+            }
         };
 
         var requestChannels = function() {
@@ -312,7 +326,7 @@
             if(isEmpty(manufactory.channels)) {
                 log('log', 'requesting channels with socketId='+socketId);
             } else {
-                log('log', 'reconnecting to saved channels');
+                log('log', 'connecting to saved channels');
                 for(var room in manufactory.channels) {
                     if(manufactory.channels.hasOwnProperty(room)) {
                         savedChannels.push(room);
@@ -335,6 +349,7 @@
 
         this['addHandler'] = addHandler;
         this['addChannel'] = addChannel;
+        this['connect'] = connectToSocket;
     };
 
     window.tattlerFactory = tattlerFactory;
