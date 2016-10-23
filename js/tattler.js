@@ -122,6 +122,8 @@
             getWs: {
                 onSuccess: function (data) {
                     manufactory.ws = data.ws;
+                    manufactory.wsPort = data.port;
+
                     if(settings.autoConnect === true) {
                         connectToSocket();
                     }
@@ -184,6 +186,7 @@
         var manufactory = {
             socket: null,
             ws: null,
+            wsPort: null,
             channels: {},
             handlers: {
                 /** @namespace data.channel */
@@ -322,10 +325,11 @@
                     return;
                 }
 
-                log('info', 'connecting to socket at', manufactory.ws);
-                manufactory.socket = io(manufactory.ws);
+                manufactory.socket = io(manufactory.ws + ':' + manufactory.wsPort);
                 manufactory.socket.on('connect', callbacks.socket.connected);
                 manufactory.socket.on('disconnect', callbacks.socket.disconnected);
+
+                log('info', 'connecting to socket at ' + manufactory.ws + ':' + manufactory.wsPort);
             } else {
                 log('error', 'socket already connected');
             }

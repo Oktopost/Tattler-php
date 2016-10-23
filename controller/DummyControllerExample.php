@@ -29,7 +29,7 @@ class DummyControllerExample
      */
     public function getWs()
     {
-        return ['ws' => $this->tattler->getWsAddress()];
+        return ['ws' => $this->tattler->getWsAddress(), 'port' => $this->tattler->getServerPort()];
     }
 
 

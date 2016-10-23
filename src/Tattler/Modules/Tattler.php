@@ -87,6 +87,14 @@ class Tattler implements ITattler
     }
 
     /**
+     * @return int
+     */
+    public function getServerPort()
+    {
+        return (self::$config->Secure ? 443 : 80 );
+    }
+
+    /**
      * @return string
      */
     public function getHttpAddress()

@@ -26,6 +26,11 @@ interface ITattler
     public function getWsAddress();
 
     /**
+     * @return int
+     */
+    public function getServerPort();
+
+    /**
      * @return string
      */
     public function getHttpAddress();
