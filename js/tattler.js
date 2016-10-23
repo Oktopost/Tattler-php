@@ -310,6 +310,18 @@
 
         var connectToSocket = function(){
             if(manufactory.socket === null) {
+                if(manufactory.ws === null && settings.autoConnect === false) {
+                    setTimeout(function(){
+                        return connectToSocket();
+                    }, 200);
+                    return;
+                }
+
+                if(manufactory.ws === null) {
+                    log('error', 'Failed to connect to socket: address unknown');
+                    return;
+                }
+
                 log('info', 'connecting to socket at', manufactory.ws);
                 manufactory.socket = io(manufactory.ws);
                 manufactory.socket.on('connect', callbacks.socket.connected);
