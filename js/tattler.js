@@ -132,9 +132,7 @@
                         manufactory.wsPort = settings.wsPort.notSecure;
                     }
 
-                    if(settings.autoConnect === true) {
-                        connectToSocket();
-                    }
+                    connectToSocket();
                 },
 
                 onError: function () {
@@ -321,13 +319,6 @@
 
         var connectToSocket = function(){
             if(manufactory.socket === null) {
-                if(manufactory.ws === null && settings.autoConnect === false) {
-                    setTimeout(function(){
-                        return connectToSocket();
-                    }, 200);
-                    return;
-                }
-
                 if(manufactory.ws === null) {
                     log('error', 'Failed to connect to socket: address unknown');
                     return;
@@ -368,12 +359,14 @@
                 callbacks.getChannels.onError);
         };
 
-        log('info', "creating socket's stuff...");
-        init();
+        if (settings.autoConnect) {
+            init();
+        }
 
+        log('info', "creating socket's stuff...");
         this['addHandler'] = addHandler;
         this['addChannel'] = addChannel;
-        this['connect'] = connectToSocket;
+        this['run'] = init;
     };
 
     window.tattlerFactory = tattlerFactory;
