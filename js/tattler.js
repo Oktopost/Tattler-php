@@ -10,6 +10,10 @@
             ws: 'get',
             channels: 'get'
         },
+        wsPort: {
+            secure: 443,
+            notSecure: 80
+        },
         autoConnect: true,
         debug: false
     };
@@ -122,7 +126,11 @@
             getWs: {
                 onSuccess: function (data) {
                     manufactory.ws = data.ws;
-                    manufactory.wsPort = data.port;
+                    if(data.ws.match(/wss/)) {
+                        manufactory.wsPort = settings.wsPort.secure;
+                    } else {
+                        manufactory.wsPort = settings.wsPort.notSecure;
+                    }
 
                     if(settings.autoConnect === true) {
                         connectToSocket();
