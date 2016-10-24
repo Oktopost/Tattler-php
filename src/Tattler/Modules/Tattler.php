@@ -200,17 +200,17 @@ class Tattler implements ITattler
     public function say()
     {
         $targetChannels = $this->targetChannels;
-        $message = $this->message;
+        $bag = $this->message;
+        $bag['id'] = uniqid();
 
         $this->reset();
 
-        foreach($targetChannels as $channel)
-        {
-            $message[ 'room' ] = $channel;
+        foreach ($targetChannels as $channel) {
+            $bag['room'] = $channel;
 
             $tattlerBag = [
-                'tattlerUri' => $this->getHttpAddress().self::EMIT_ENDPOINT,
-                'payload' => [ 'root' => self::$config->Namespace, 'room' => $channel, 'bag' => $message ]
+                'tattlerUri' => $this->getHttpAddress() . self::EMIT_ENDPOINT,
+                'payload'    => ['root' => self::$config->Namespace, 'room' => $channel, 'bag' => $bag],
             ];
 
             if (!Common::network()->sendPayload($tattlerBag)) {
