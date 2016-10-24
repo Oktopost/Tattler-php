@@ -58,6 +58,13 @@ class Tattler implements ITattler
         return Common::network()->syncChannels($tattlerBag);
     }
 
+    private function reset()
+    {
+        $this->targetChannels = [];
+        $this->message = null;
+        return;
+    }
+
 
     /**
      * Tattler constructor.
@@ -192,22 +199,25 @@ class Tattler implements ITattler
      */
     public function say()
     {
-        $result = true;
+        $targetChannels = $this->targetChannels;
+        $message = $this->message;
 
-        foreach($this->targetChannels as $channel)
+        $this->reset();
+
+        foreach($targetChannels as $channel)
         {
-            $data = $this->message;
-            $data[ 'room' ] = $channel;
+            $message[ 'room' ] = $channel;
 
             $tattlerBag = [
                 'tattlerUri' => $this->getHttpAddress().self::EMIT_ENDPOINT,
-                'payload' => [ 'root' => self::$config->Namespace, 'room' => $channel, 'bag' => $data ]
+                'payload' => [ 'root' => self::$config->Namespace, 'room' => $channel, 'bag' => $message ]
             ];
 
-            if (!Common::network()->sendPayload($tattlerBag))
-                $result = false;
+            if (!Common::network()->sendPayload($tattlerBag)) {
+                return false;
+            }
         }
 
-        return $result;
+        return true;
     }
 }
