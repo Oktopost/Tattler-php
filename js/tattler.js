@@ -14,8 +14,9 @@
             secure: 443,
             notSecure: 80
         },
-        autoConnect: true,
-        debug: false
+        autoConnect: true, // automatically init plugin
+        skipMessageDuplicates: true, // possible in case of sending one message to different channels
+        debug: false // show messages in console
     };
 
     var tattlerInstances = {};
@@ -121,6 +122,7 @@
     };
 
     var Tattler = function(options) {
+        var messageIds = [];
         var settings = extendConfig(defaults, options);
         var callbacks = {
             getWs: {
@@ -172,8 +174,24 @@
 
                     /** @namespace data.payload */
                     manufactory.socket.on('defaultEvent', function (data) {
+                        var id = data.id || Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 30);
                         var handler = data.handler;
                         var namespace = data.namespace || 'global';
+
+                        if(settings.skipMessageDuplicates === true) {
+                            for(var i=0;i<30;i++) {
+                                if(!messageIds.hasOwnProperty(i)) {
+                                    break;
+                                }
+
+                                if(messageIds[i] === id) {
+                                    log('warn', 'preventing message duplicate', data);
+                                    return;
+                                }
+                            }
+
+                            messageIds.unshift(id);
+                        }
 
                         if(handlerExists(namespace, handler) === false) {
                             log('error', 'handler ' + handler + ' with namespace ' + namespace + ' not defined', data);
