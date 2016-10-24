@@ -203,9 +203,13 @@
                             return;
                         }
 
-                        log('warn', '-------------------------------------------------------------');
-                        log('warn', 'remote: ' + data['message']);
-                        log('warn', '-------------------------------------------------------------');
+                        if(settings.debug === true) {
+                            log('warn', '-------------------------------------------------------------');
+                            log('warn', 'remote: ' + data['message']);
+                            log('warn', '-------------------------------------------------------------');
+                        } else {
+                            log('warn', 'remote', data['message']);
+                        }
                     },
                     'alert': function (data) {
                         var text;
@@ -242,6 +246,7 @@
                 }
             }
         };
+        var logs = [];
 
         var handlerExists = function(namespace, event){
             return typeof manufactory.handlers[namespace] !== 'undefined' &&
@@ -295,11 +300,20 @@
 
         var log = function() {
             var args = [];
+            var result = {};
+
             for(var i=0; i<arguments.length;i++) {
                 args.push(arguments[i]);
             }
 
             var type=args.shift();
+
+            result.type = type;
+            result.date = new Date();
+            result.data = args;
+
+            logs.push(result);
+
             if(settings.debug === true) {
                 args.unshift('Tattler:');
                 for(var x in args) {
@@ -309,6 +323,12 @@
                     }
                 }
                 console[type](args.join(' '));
+            }
+        };
+
+        var debug =  function(){
+            for(var item in logs) {
+                console[logs[item].type](logs[item].date, logs[item].data);
             }
         };
 
@@ -364,6 +384,7 @@
         }
 
         log('info', "creating socket's stuff...");
+        this['debug'] = debug;
         this['addHandler'] = addHandler;
         this['addChannel'] = addChannel;
         this['run'] = init;
