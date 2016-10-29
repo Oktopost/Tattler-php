@@ -205,6 +205,8 @@ class Tattler implements ITattler
 
         $this->reset();
 
+        $result = true;
+
         foreach ($targetChannels as $channel) {
             $bag['room'] = $channel;
 
@@ -213,11 +215,9 @@ class Tattler implements ITattler
                 'payload'    => ['root' => self::$config->Namespace, 'room' => $channel, 'bag' => $bag],
             ];
 
-            if (!Common::network()->sendPayload($tattlerBag)) {
-                return false;
-            }
+            $result = Common::network()->sendPayload($tattlerBag) & $result;
         }
 
-        return true;
+        return $result;
     }
 }
