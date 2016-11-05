@@ -10,12 +10,7 @@
             ws: 'get',
             channels: 'get'
         },
-        wsPort: {
-            secure: 443,
-            notSecure: 80
-        },
         autoConnect: true, // automatically init plugin
-        skipMessageDuplicates: true, // possible in case of sending one message to different channels
         debug: false // show messages in console
     };
 
@@ -109,6 +104,14 @@
         return JSON.stringify(obj) === JSON.stringify({});
     }
 
+    function parseURI(str) {
+        var match = str.match(/^(wss?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
+        return match && {
+                protocol: match[1],
+                hostname: match[3],
+                port: match[4]
+            }
+    }
 
     var tattlerFactory = {
         getInstance: function(instanceName){
@@ -127,12 +130,9 @@
         var callbacks = {
             getWs: {
                 onSuccess: function (data) {
-                    manufactory.ws = data.ws;
-                    if(data.ws.match(/wss/)) {
-                        manufactory.wsPort = settings.wsPort.secure;
-                    } else {
-                        manufactory.wsPort = settings.wsPort.notSecure;
-                    }
+                    var parsedURI = parseURI(data.ws);
+                    manufactory.server = parsedURI.protocol + '//' +parsedURI.hostname;
+                    manufactory.port = parsedURI.port;
 
                     connectToSocket();
                 },
@@ -178,20 +178,20 @@
                         var handler = data.handler;
                         var namespace = data.namespace || 'global';
 
-                        if(settings.skipMessageDuplicates === true) {
-                            for(var i=0;i<30;i++) {
-                                if(!messageIds.hasOwnProperty(i)) {
-                                    break;
-                                }
-
-                                if(messageIds[i] === id) {
-                                    log('warn', 'preventing message duplicate', data);
-                                    return;
-                                }
+                        for (var i = 0; i < 10; i++) {
+                            if (!messageIds.hasOwnProperty(i)) {
+                                break;
                             }
 
-                            messageIds.unshift(id);
+                            if (messageIds[i] === id) {
+                                log('info', 'preventing duplicate message processing', data);
+                                return;
+                            }
                         }
+
+                        messageIds.unshift(id);
+                        messageIds.length = 10;
+
 
                         if(handlerExists(namespace, handler) === false) {
                             log('error', 'handler ' + handler + ' with namespace ' + namespace + ' not defined', data);
@@ -209,8 +209,8 @@
         };
         var manufactory = {
             socket: null,
-            ws: null,
-            wsPort: null,
+            server: null,
+            port: null,
             channels: {},
             handlers: {
                 /** @namespace data.channel */
@@ -340,6 +340,7 @@
                         return;
                     }
                 }
+
                 console[type](args.join(' '));
             }
         };
@@ -357,16 +358,16 @@
 
         var connectToSocket = function(){
             if(manufactory.socket === null) {
-                if(manufactory.ws === null) {
+                if(manufactory.server === null) {
                     log('error', 'Failed to connect to socket: address unknown');
                     return;
                 }
 
-                manufactory.socket = io(manufactory.ws + ':' + manufactory.wsPort);
+                manufactory.socket = io(manufactory.server + ':' + manufactory.port);
                 manufactory.socket.on('connect', callbacks.socket.connected);
                 manufactory.socket.on('disconnect', callbacks.socket.disconnected);
 
-                log('info', 'connecting to socket at ' + manufactory.ws + ':' + manufactory.wsPort);
+                log('info', 'connecting to socket at ' + manufactory.server + ':' + manufactory.port);
             } else {
                 log('error', 'socket already connected');
             }

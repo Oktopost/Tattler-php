@@ -2,18 +2,18 @@
 namespace Tattler\Objects;
 
 
-use Objection\LiteObject;
 use Objection\LiteSetup;
+use Objection\LiteObject;
 
 
 /**
- * @property $Server
- * @property $Secure
- * @property $Namespace
+ * @property string $Server
+ * @property int    $Port
+ * @property bool   $Secure
+ * @property string $Namespace
  */
 class TattlerConfig extends LiteObject
 {
-
     /**
      * @return array
      */
@@ -21,8 +21,9 @@ class TattlerConfig extends LiteObject
     {
         return [
             'Server'    => LiteSetup::createString(),
+            'Port'      => LiteSetup::createInt(),
             'Secure'    => LiteSetup::createBool(),
-            'Namespace' => LiteSetup::createString()
+            'Namespace' => LiteSetup::createString(),
         ];
     }
 

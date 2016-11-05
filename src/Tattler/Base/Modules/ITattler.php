@@ -13,6 +13,19 @@ use Tattler\Base\Objects\ITattlerMessage;
  */
 interface ITattler
 {
+    const WS_PROTOCOL = 'ws:';
+
+    const WSS_PROTOCOL = 'wss:';
+
+    const HTTP_PROTOCOL = 'http:';
+
+    const HTTPS_PROTOCOL = 'https:';
+
+    const DEFAULT_PORT = 80;
+
+    const DEFAULT_SECURE_PORT = 443;
+
+
     /**
      * @param TattlerConfig $config
      * @return static

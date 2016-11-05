@@ -1,18 +1,17 @@
 <?php
 namespace Tattler\Modules;
 
-use Tattler\Base\Channels\IChannel;
+use Tattler\Common;
+use Tattler\Channels\Broadcast;
+use Tattler\Objects\TattlerConfig;
 use Tattler\Base\Channels\IUser;
-use Tattler\Base\DAL\ITattlerAccessDAO;
+use Tattler\Base\Channels\IChannel;
 use Tattler\Base\Modules\ITattler;
 use Tattler\Base\Objects\ITattlerMessage;
-use Tattler\Channels\Broadcast;
-use Tattler\Common;
-use Tattler\Objects\TattlerConfig;
 
 
 /**
- * Class Tattler
+ * @autoload
  */
 class Tattler implements ITattler
 {
@@ -24,7 +23,10 @@ class Tattler implements ITattler
     /** @var TattlerConfig $config */
     private static $config;
 
-    /** @var ITattlerAccessDAO $accessDAO */
+    /**
+     * @autoload
+     * @var \Tattler\Base\DAL\ITattlerAccessDAO $accessDAO
+     */
     private $accessDAO;
 
     /** @var array $targetChannels */
@@ -65,15 +67,25 @@ class Tattler implements ITattler
         return;
     }
 
-
     /**
-     * Tattler constructor.
-     * @param ITattlerAccessDAO $accessDAO
+     * @return string
      */
-    public function __construct(ITattlerAccessDAO $accessDAO)
+    private function getServerURI()
     {
-        $this->accessDAO = $accessDAO;
+        $server = self::$config->Server;
+
+        if (self::$config->Port != 0)
+        {
+            $port = self::$config->Port;
+        }
+        else
+        {
+            $port = self::$config->Secure ? ITattler::DEFAULT_SECURE_PORT : ITattler::DEFAULT_PORT;
+        }
+
+        return $server . ':' . $port;
     }
+
 
     /**
      * @param TattlerConfig $config
@@ -90,7 +102,7 @@ class Tattler implements ITattler
      */
     public function getWsAddress()
     {
-        return 'w' . (self::$config->Secure ? 's' : '') .'s://'.self::$config->Server;
+        return  (self::$config->Secure ? ITattler::WSS_PROTOCOL : ITattler::WS_PROTOCOL) . '//' . $this->getServerURI();
     }
 
     /**
@@ -98,7 +110,7 @@ class Tattler implements ITattler
      */
     public function getHttpAddress()
     {
-        return 'http' . (self::$config->Secure ? 's' : '') .'://'.self::$config->Server;
+        return  (self::$config->Secure ? ITattler::HTTPS_PROTOCOL : ITattler::HTTP_PROTOCOL) . '//' . $this->getServerURI();
     }
 
     /**
@@ -218,6 +230,6 @@ class Tattler implements ITattler
             $result = Common::network()->sendPayload($tattlerBag) & $result;
         }
 
-        return $result;
+        return (bool)$result;
     }
 }
