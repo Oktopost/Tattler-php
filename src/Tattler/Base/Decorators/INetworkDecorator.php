@@ -4,7 +4,7 @@ namespace Tattler\Base\Decorators;
 
 
 /**
- * Interface INetworkDecorator
+ * @skeleton
  */
 interface INetworkDecorator
 {

@@ -2,9 +2,9 @@
 namespace Tattler\Channels;
 
 
-use Tattler\Objects\TattlerAccess;
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\Channels\IUser;
+use Tattler\Objects\TattlerAccess;
 
 
 /**

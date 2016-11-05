@@ -2,7 +2,7 @@
 
 
 /**
- * Interface IRoom
+ * @skeleton
  */
 interface IRoom extends IChannel
 {

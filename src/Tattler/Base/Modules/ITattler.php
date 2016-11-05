@@ -9,7 +9,7 @@ use Tattler\Base\Objects\ITattlerMessage;
 
 
 /**
- * Interface ITattler
+ * @skeleton
  */
 interface ITattler
 {

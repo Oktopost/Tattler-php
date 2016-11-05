@@ -3,7 +3,7 @@ namespace Tattler\Base\Channels;
 
 
 /**
- * Interface IChannel
+ * @skeleton
  */
 interface IChannel
 {

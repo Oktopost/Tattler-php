@@ -3,7 +3,7 @@ namespace Tattler\Base\Objects;
 
 
 /**
- * Interface ITattlerMessage
+ * @skeleton
  */
 interface ITattlerMessage
 {

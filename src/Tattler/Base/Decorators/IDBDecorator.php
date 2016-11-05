@@ -6,7 +6,7 @@ use Tattler\Objects\TattlerAccess;
 
 
 /**
- * Interface IDBDecorator
+ * @skeleton
  */
 interface IDBDecorator
 {

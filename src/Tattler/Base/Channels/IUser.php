@@ -5,7 +5,7 @@ use Closure;
 
 
 /**
- * Interface IUser
+ * @skeleton
  */
 interface IUser extends IChannel
 {

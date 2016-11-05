@@ -66,7 +66,7 @@ class Common
 			{
 				throw new \Exception('DB decorator must be an instance of IDBDecorator');
 			}
-			
+
 			self::$database = $decorator;
 		}
 		
