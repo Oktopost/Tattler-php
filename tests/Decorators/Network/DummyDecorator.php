@@ -21,10 +21,10 @@ class DummyDecorator implements INetworkDecorator
 	
 	/**
 	 * @param array $tattlerBag
-	 * @return bool
+	 * @return array|bool
 	 */
 	public function syncChannels(array $tattlerBag)
 	{
-		return explode(',', $tattlerBag->payload->rooms);
+		return explode(',', $tattlerBag['payload']['rooms']);
 	}
 }
