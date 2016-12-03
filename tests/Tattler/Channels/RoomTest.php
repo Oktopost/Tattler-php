@@ -1,5 +1,5 @@
 <?php
-namespace Tattler\Channels;
+namespace Tests\Tattler\Channels;
 
 
 use Tattler\Base\Channels\IRoom;

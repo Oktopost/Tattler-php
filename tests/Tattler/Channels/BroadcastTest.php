@@ -1,8 +1,12 @@
 <?php
-namespace Tattler\Channels;
+namespace Tests\Tattler\Channels;
 
 
+use Tattler\Channels\Broadcast;
 use Tattler\Base\Channels\IChannel;
+
+
+require_once __DIR__ .'/../config.php';
 
 
 class BroadcastTest extends \PHPUnit_Framework_TestCase

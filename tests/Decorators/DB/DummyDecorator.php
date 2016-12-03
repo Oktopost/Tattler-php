@@ -1,5 +1,5 @@
 <?php
-namespace Tattler\Decorators\DB;
+namespace Tests\Tattler\Decorators\DB;
 
 
 use Tattler\Objects\TattlerAccess;

@@ -6,12 +6,13 @@ use Tattler\Base\Channels\IRoom;
 use Tattler\Base\Channels\IUser;
 
 
+require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../Decorators/DB/DummyDecorator.php';
 require_once __DIR__ . '/../Decorators/Network/DummyDecorator.php';
 
 
-Common::database(new \Tattler\Decorators\DB\DummyDecorator());
-Common::network(new \Tattler\Decorators\Network\DummyDecorator());
+Common::database(new \Tests\Tattler\Decorators\DB\DummyDecorator());
+Common::network(new \Tests\Tattler\Decorators\Network\DummyDecorator());
 
 
 /**
@@ -26,7 +27,12 @@ function getDummyUser()
 	return $user;
 }
 
+/**
+ * @return IRoom
+ */
 function getDummyRoom()
 {
-	return Common::skeleton(IRoom::class);
+	/** @var IRoom $result */
+	$result = Common::skeleton(IRoom::class);
+	return $result;
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Tattler\Decorators\Network;
+namespace Tests\Tattler\Decorators\Network;
 
 
 use Tattler\Base\Decorators\INetworkDecorator;

@@ -1,4 +1,4 @@
-<?php namespace Tattler\Channels;
+<?php namespace Tests\Tattler\Channels;
 
 
 use Tattler\Base\Channels\IChannel;

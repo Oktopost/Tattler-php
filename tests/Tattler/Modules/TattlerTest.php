@@ -1,14 +1,15 @@
-<?php namespace Tattler\Modules;
+<?php namespace Tests\Tattler\Modules;
 
+
+use Tattler\Common;
+use Tattler\Channels\Broadcast;
+use Tattler\Base\Channels\IRoom;
+use Tattler\Objects\TattlerConfig;
+use Tattler\Base\Modules\ITattler;
+use Tattler\Base\Channels\IChannel;
+use Tattler\Base\Objects\ITattlerMessage;
 
 use PHPUnit_Framework_TestCase;
-use Tattler\Base\Channels\IChannel;
-use Tattler\Base\Channels\IRoom;
-use Tattler\Base\Modules\ITattler;
-use Tattler\Base\Objects\ITattlerMessage;
-use Tattler\Channels\Broadcast;
-use Tattler\Common;
-use Tattler\Objects\TattlerConfig;
 
 
 require_once __DIR__ . '/../config.php';
