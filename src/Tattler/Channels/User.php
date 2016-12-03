@@ -1,9 +1,9 @@
 <?php
 namespace Tattler\Channels;
 
+
 use Closure;
 use Ramsey\Uuid\Uuid;
-use Tattler\Base\Channels\IChannel;
 use Tattler\Base\Channels\IUser;
 
 
