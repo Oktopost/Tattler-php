@@ -49,11 +49,22 @@ class RoomTest extends PHPUnit_Framework_TestCase
     	self::expectException(\Exception::class);
 	    $this->room->getName();
     }
-
-    public function test_should_allow_access_for_specified_user()
-    {
-	    self::assertTrue($this->room->setName($this->roomName)->allow(getDummyUser()));
-    }
+	
+	public function test_should_allow_access_for_specified_user()
+	{
+		self::assertTrue($this->room->setName($this->roomName)->allow(getDummyUser()));
+	}
+	
+	public function test_allow_twice_should_return_true()
+	{
+		$room = $this->room->setName($this->roomName);
+		$user = getDummyUser();
+		$user->setSocketId(uniqid());
+		$room->allow($user);
+		$room->lock($user);
+		
+		self::assertTrue($room->allow($user));
+	}
     
     public function test_deny_should_return_true()
     {

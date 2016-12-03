@@ -7,8 +7,6 @@ use Tattler\Base\Channels\IUser;
 
 
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/../Decorators/DB/DummyDecorator.php';
-require_once __DIR__ . '/../Decorators/Network/DummyDecorator.php';
 
 
 Common::database(new \Tests\Tattler\Decorators\DB\DummyDecorator());
