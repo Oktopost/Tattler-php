@@ -9,7 +9,10 @@
 		"oktopost/skeleton": "^1.0"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "5.5.*"
+		"phpunit/phpunit": "5.5.*",
+		"oktopost/squanch": "1.0.4.2",
+		"oktopost/squid": "^1.0",
+		"predis/predis": "^1.1"
 	},
 	"license": "MIT",
 	"authors": [
@@ -39,8 +42,9 @@
 		"test": "./vendor/bin/phpunit"
 	},
 	"suggest": {
-		"predis/predis": "Store users/channels tokens in Redis DB",
+		"oktopost/squanch": "Store users/channels tokens with Squanch client",
 		"oktopost/squid": "Store users/channels tokens in MySQL DB",
+		"predis/predis": "Store users/channels tokens in Redis DB",
 		"guzzlehttp/guzzle": "Communicate with Tattler backend through guzzle (optional, by default CURL will be used)",
 		"nategood/httpful": "Communicate with Tattler backend through httpful (optional, by default CURL will be used)"
 	}

@@ -112,13 +112,13 @@ class RedisDecorator implements IDBDecorator
      */
     public function deleteAccess(TattlerAccess $access)
     {
-        return $this->client->hdel($this->getAccessObjectKey($access), $access->Channel);
+        return $this->client->hdel($this->getAccessObjectKey($access), [$access->Channel]);
     }
 
     /**
      * @param string $userToken
      * @param bool   $unlock
-     * @return bool|TattlerAccess[]
+     * @return TattlerAccess[]|bool
      */
     public function loadAllChannels($userToken, $unlock = true)
     {
@@ -129,10 +129,12 @@ class RedisDecorator implements IDBDecorator
         if (!$data)
             return false;
 
+        /** @var TattlerAccess[] $result */
         $result = Mapper::getObjectsFrom(TattlerAccess::class, $data);
         $locked = [];
 
-        foreach($result as $key=>$value)
+        /** @var TattlerAccess $value */
+		foreach($result as $key=>$value)
         {
             if ($value->IsLocked)
             {
