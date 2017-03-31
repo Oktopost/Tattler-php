@@ -28,6 +28,7 @@ class TattlerTest extends PHPUnit_Framework_TestCase
 		$result->Port = 80;
 		$result->Secure = false;
 		$result->Server = 'localhost.domain.tld';
+		$result->Secret = uniqid();
 		
 		return $result;
 	}
@@ -201,6 +202,4 @@ class TattlerTest extends PHPUnit_Framework_TestCase
 		
 		self::assertTrue($this->tattler->say());
 	}
-	
-	
 }

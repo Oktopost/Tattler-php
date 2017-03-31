@@ -112,6 +112,14 @@ class Tattler implements ITattler
     {
         return  (self::$config->Secure ? ITattler::HTTPS_PROTOCOL : ITattler::HTTP_PROTOCOL) . '//' . $this->getServerURI();
     }
+	
+	/**
+	 * @return string
+	 */
+	public function getJWTSecret()
+	{
+		return self::$config->Secret;
+	}
 
     /**
      * @param IUser $user

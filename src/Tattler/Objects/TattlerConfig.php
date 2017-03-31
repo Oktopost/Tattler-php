@@ -11,6 +11,7 @@ use Objection\LiteObject;
  * @property int    $Port
  * @property bool   $Secure
  * @property string $Namespace
+ * @property string $Secret
  */
 class TattlerConfig extends LiteObject
 {
@@ -24,6 +25,7 @@ class TattlerConfig extends LiteObject
             'Port'      => LiteSetup::createInt(),
             'Secure'    => LiteSetup::createBool(),
             'Namespace' => LiteSetup::createString(),
+            'Secret'    => LiteSetup::createString()
         ];
     }
 

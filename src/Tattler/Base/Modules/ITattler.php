@@ -42,6 +42,11 @@ interface ITattler
      * @return string
      */
     public function getHttpAddress();
+	
+	/**
+	 * @return string
+	 */
+    public function getJWTSecret();
 
     /**
      * @param IUser $user
