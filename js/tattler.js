@@ -199,9 +199,9 @@
 						} else {
 							if (typeof data.payload === 'undefined') {
 								// backward compatibility to old version of Tattler backend
-								manufactory.handlers[namespace][handler](data);
+								manufactory.handlers[namespace][handler](data, data.room);
 							} else {
-								manufactory.handlers[namespace][handler](data.payload);
+								manufactory.handlers[namespace][handler](data.payload, data.room);
 							}
 						}
 					})
