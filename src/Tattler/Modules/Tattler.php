@@ -149,10 +149,10 @@ class Tattler implements ITattler
      */
     public function getChannels($filter = [])
     {
-        $result = $this->syncChannels(array_merge(
-            $this->accessDAO->loadAllChannelNames($this->currentUser->getName()),
-            $this->getDefaultChannels($this->currentUser)
-        ));
+		$result = $this->syncChannels(array_unique(array_merge(
+			$this->accessDAO->loadAllChannelNames($this->currentUser->getName()),
+			$this->getDefaultChannels($this->currentUser)
+		)));
 
         if ($filter)
         {
