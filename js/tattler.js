@@ -12,8 +12,8 @@
 			channels: 'get',
 			auth: 'get'
 		},
-		connectCallback: false,
-		connectCallbackOnce: false,
+		readyCallback: false,
+		readyCallbackOnce: false,
 		autoConnect: true, // automatically init plugin
 		debug: false // show messages in console
 	};
@@ -152,6 +152,15 @@
 						}
 					}
 					callbacks.socket.handleEvents();
+
+					if (typeof settings.readyCallback === 'function') {
+						settings.readyCallback();
+					}
+
+					if (typeof settings.readyCallbackOnce === 'function') {
+						settings.readyCallbackOnce();
+						settings.readyCallbackOnce = false;
+					}
 				},
 				onError: function () {
 					log('error', 'Failed to get channels listing');
@@ -159,18 +168,9 @@
 			},
 			socket: {
 				connected: function () {
-					log('warn', 'connected to socket');
-
-					if (typeof settings.connectCallback === 'function') {
-						settings.connectCallback();
-					}
-
-					if (typeof settings.connectCallbackOnce === 'function') {
-						settings.connectCallbackOnce();
-						settings.connectCallbackOnce = false;
-					}
-
 					requestChannels();
+
+					log('warn', 'connected to socket');
 				},
 				disconnected: function () {
 					log('error', 'disconnected from socket');
