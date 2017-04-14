@@ -12,6 +12,8 @@
 			channels: 'get',
 			auth: 'get'
 		},
+		connectCallback: false,
+		connectCallbackOnce: false,
 		autoConnect: true, // automatically init plugin
 		debug: false // show messages in console
 	};
@@ -158,6 +160,16 @@
 			socket: {
 				connected: function () {
 					log('warn', 'connected to socket');
+
+					if (typeof settings.connectCallback === 'function') {
+						settings.connectCallback();
+					}
+
+					if (typeof settings.connectCallbackOnce === 'function') {
+						settings.connectCallbackOnce();
+						settings.connectCallbackOnce = false;
+					}
+
 					requestChannels();
 				},
 				disconnected: function () {
@@ -199,9 +211,9 @@
 						} else {
 							if (typeof data.payload === 'undefined') {
 								// backward compatibility to old version of Tattler backend
-								manufactory.handlers[namespace][handler](data, data.room);
+								manufactory.handlers[namespace][handler](data);
 							} else {
-								manufactory.handlers[namespace][handler](data.payload, data.room);
+								manufactory.handlers[namespace][handler](data.payload);
 							}
 						}
 					})
@@ -224,16 +236,16 @@
 
 						if (settings.debug === true) {
 							log('warn', '-------------------------------------------------------------');
-							log('warn', 'remote: ' + data['message']);
+							log('warn', 'remote: ' + data.message);
 							log('warn', '-------------------------------------------------------------');
 						} else {
-							log('warn', 'remote', data['message']);
+							log('warn', 'remote', data.message);
 						}
 					},
 					'alert': function (data) {
 						var text;
 						if (typeof data.title !== 'undefined') {
-							text = data['title']
+							text = data.title
 						}
 
 						if (text !== '') {
@@ -241,23 +253,23 @@
 							text += "\n";
 						}
 
-						text += data['message'];
+						text += data.message;
 
 						alert(text);
 					},
 					'confirm': function (data) {
 						if (confirm(data.message)) {
-							if (data['yes'] !== undefined && typeof[data['yes']] === 'function') {
-								data['yes']();
+							if (data.yes !== undefined && typeof[data.yes] === 'function') {
+								data.yes();
 							}
 						} else {
-							if (data['no'] !== undefined && typeof data['no'] === 'function') {
-								window[data['no']]();
+							if (data.no !== undefined && typeof data.no === 'function') {
+								window[data.no]();
 							}
 						}
 					},
-					'addChannel': function (data, state) {
-						addChannel(data.channel, state);
+					'addChannel': function (data) {
+						addChannel(data.channel, false);
 					},
 					'removeChannel': function (data) {
 						removeChannel(data.channel);
@@ -416,10 +428,11 @@
 		}
 
 		log('info', "creating socket's stuff...");
-		this['debug'] = debug;
-		this['addHandler'] = addHandler;
-		this['addChannel'] = addChannel;
-		this['run'] = init;
+
+		this.debug = debug;
+		this.addHandler = addHandler;
+		this.addChannel = addChannel;
+		this.run = init;
 	};
 
 	window.tattlerFactory = tattlerFactory;
