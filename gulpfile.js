@@ -4,6 +4,7 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 
 var files = [
+	'node_modules/socket.io-client/dist/socket.io.js',
 	'js/tattler.js'
 ];
 
