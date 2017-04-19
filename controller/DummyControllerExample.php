@@ -5,8 +5,6 @@ use Tattler\Common;
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\Channels\IUser;
 use Tattler\Base\Modules\ITattler;
-
-use Firebase\JWT\JWT;
 use Tattler\Objects\TattlerConfig;
 
 
@@ -40,10 +38,7 @@ class DummyControllerExample
 	public function getAuth()
 	{
 		return [
-			'token' => JWT::encode(
-				['some_dummy_data' => 'my uniq user id'],
-				$this->tattler->getJWTSecret()
-			)
+			'token' => $this->tattler->getJWTToken()
 		];
 	}
 	

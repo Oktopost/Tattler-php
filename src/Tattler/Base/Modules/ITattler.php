@@ -46,7 +46,7 @@ interface ITattler
 	/**
 	 * @return string
 	 */
-    public function getJWTSecret();
+    public function getJWTToken();
 
     /**
      * @param IUser $user

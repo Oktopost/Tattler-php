@@ -12,6 +12,8 @@ use Tattler\Base\Objects\ITattlerMessage;
 use Tattler\Channels\Broadcast;
 use Tattler\Objects\TattlerConfig;
 
+use Firebase\JWT\JWT;
+
 
 /**
  * @autoload
@@ -124,9 +126,17 @@ class Tattler implements ITattler
 	/**
 	 * @return string
 	 */
-	public function getJWTSecret()
+	public function getJWTToken()
 	{
-		return self::$config->Secret;
+		$secret = self::$config->Secret;
+		
+		return JWT::encode(
+			[
+				'r' => mt_rand(),
+				'n' => strtotime('now')
+				],
+			$secret
+		);
 	}
 	
 	/**
