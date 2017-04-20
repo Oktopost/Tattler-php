@@ -129,11 +129,12 @@ class Tattler implements ITattler
 	public function getJWTToken()
 	{
 		$secret = self::$config->Secret;
+		$ttl = (int)self::$config->TokenTTL;
 		
 		return JWT::encode(
 			[
 				'r' => mt_rand(),
-				'n' => strtotime('now')
+				'exp' => strtotime('now') + $ttl
 				],
 			$secret
 		);
