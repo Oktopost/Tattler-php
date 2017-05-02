@@ -2,14 +2,10 @@
 namespace Tattler\Decorators\DB;
 
 
-use Objection\Mapper;
-use Objection\LiteObject;
-
-use ReflectionClass;
-use Squanch\Base\ICachePlugin;
-
 use Tattler\Objects\TattlerAccess;
 use Tattler\Base\Decorators\IDBDecorator;
+
+use Squanch\Base\ICachePlugin;
 
 
 class SquanchDecorator implements IDBDecorator
@@ -17,70 +13,65 @@ class SquanchDecorator implements IDBDecorator
 	/** @var ICachePlugin */
 	private $client;
 	
-	
-	/**
-	 * @param LiteObject $object
-	 * @return string
-	 */
-	private function getClassShortName($object)
-	{
-		$reflection = new ReflectionClass($object);
-		return $reflection->getShortName();
-	}
-	
-	/**
-	 * @param TattlerAccess $object
-	 * @return string
-	 */
-	private function getBucketName(TattlerAccess $object)
-	{
-		return $this->getClassShortName($object).':'.$object->UserToken;
-	}
+	private $bucket;
 	
 	
 	/**
 	 * @param ICachePlugin $squanch
-	 * @param string $bucket
+	 * @param string $bucketName
 	 */
-	public function __construct(ICachePlugin $squanch)
+	public function __construct(ICachePlugin $squanch, $bucketName = 'tattler-php')
 	{
 		$this->client = $squanch;
+		$this->bucket = $bucketName;
 	}
 	
 	
 	/**
-	 * @return ICachePlugin
+	 * @param TattlerAccess $access
+	 * @param int $ttl
+	 * @return bool
 	 */
-	public function getConnection()
-	{
-		return $this->client;
-	}
-	
-	
 	public function insertAccess(TattlerAccess $access, $ttl)
 	{
-		return $this->client->set()
-			->setKey($access->Channel)
-			->setData(Mapper::getJsonFor($access))
-			->setBucket($this->getBucketName($access))
+		$items = $this->client
+			->get($access->UserToken, $this->bucket)
+			->asLiteObjects(TattlerAccess::class);
+		
+		if (!$items)
+		{
+			$items = [$access];
+		}
+		else
+		{
+			$exists = false;
+			/** @var TattlerAccess $item */
+			foreach ($items as $key=>$item)
+			{
+				if ($item->Channel === $access->Channel)
+				{
+					$items[$key] = $access;
+					$exists = true;
+					break;
+				}
+			}
+			
+			if (!$exists) $items[] = $access;
+		}
+		
+		return $this->client->set($access->UserToken, $items, $this->bucket)
 			->setTTL($ttl)
-			->execute();
+			->save();
 	}
 	
 	/**
 	 * @param TattlerAccess $access
 	 * @param int $newTTL
-	 * @return mixed
+	 * @return bool
 	 */
 	public function updateAccessTTL(TattlerAccess $access, $newTTL)
 	{
-		return $this->client->set()
-			->updateOnly()
-			->setKey($access->Channel)
-			->setBucket($this->getBucketName($access))
-			->setTTL($newTTL)
-			->setData($access)
-			->execute();
+		return $this->insertAccess($access, $newTTL);
 	}
 	
 	/**
@@ -89,10 +80,23 @@ class SquanchDecorator implements IDBDecorator
 	 */
 	public function accessExists(TattlerAccess $access)
 	{
-		return $this->client->has()
-			->byKey($access->Channel)
-			->byBucket($this->getBucketName($access))
-			->execute();
+		$items = $this->client->get()
+			->byKey($access->UserToken)
+			->byBucket($this->bucket)
+			->asLiteObjects(TattlerAccess::class);
+		
+		if (!$items) return false;
+		
+		/** @var TattlerAccess $item */
+		foreach ($items as $item)
+		{
+			if ($item->Channel === $access->Channel)
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -101,37 +105,55 @@ class SquanchDecorator implements IDBDecorator
 	 */
 	public function deleteAccess(TattlerAccess $access)
 	{
-		return $this->client->delete()
-			->byKey($access->Channel)
-			->byBucket($this->getBucketName($access))
-			->execute();
+		$items = $this->client->get($access->UserToken, $this->bucket)->asLiteObjects(TattlerAccess::class);
+		
+		if (!$items) return true;
+		
+		$found = false;
+		
+		/** @var TattlerAccess $item */
+		foreach ($items as $key=>$item)
+		{
+			if ($item->Channel == $access->Channel)
+			{
+				unset($items[$key]);
+				$found = true;
+				break;
+			}
+		}
+		
+		if ($found)
+		{
+			$this->client->set($access->UserToken, $items, $this->bucket)->update();
+		}
+		
+		return true;
 	}
 	
 	/**
 	 * @param string $userToken
 	 * @param bool $unlock
-	 * @return bool|TattlerAccess[]
+	 * @return TattlerAccess[]|bool
 	 */
 	public function loadAllChannels($userToken, $unlock = true)
 	{
-		$tmpAccess = new TattlerAccess();
-		$tmpAccess->UserToken = $userToken;
-		$data = $this->client->get()->byBucket($this->getBucketName($tmpAccess))->asCollection();
+		$data = $this->client->get()
+			->byKey($userToken)
+			->byBucket($this->bucket)
+			->asLiteObjects(TattlerAccess::class);
 		
 		if (!$data)
 			return false;
 		
-		$result = $data->asLiteObjects(TattlerAccess::class);
-		
 		$locked = [];
 		
 		/** @var TattlerAccess $value */
-		foreach($result as $key=>$value)
+		foreach($data as $key=>$value)
 		{
 			if ($value->IsLocked)
 			{
 				$locked[] = $value;
-				unset($result[$key]);
+				unset($data[$key]);
 			}
 		}
 		
@@ -141,7 +163,7 @@ class SquanchDecorator implements IDBDecorator
 			}
 		}
 		
-		return $result;
+		return $data;
 	}
 	
 	/**
@@ -152,12 +174,7 @@ class SquanchDecorator implements IDBDecorator
 	{
 		$access->IsLocked = true;
 		
-		return $this->client->set()
-			->updateOnly()
-			->setKey($access->Channel)
-			->setData(Mapper::getJsonFor($access))
-			->setBucket($this->getBucketName($access))
-			->execute();
+		return $this->insertAccess($access, -1);
 	}
 	
 	/**
@@ -168,12 +185,7 @@ class SquanchDecorator implements IDBDecorator
 	{
 		$access->IsLocked = false;
 		
-		return $this->client->set()
-			->updateOnly()
-			->setKey($access->Channel)
-			->setData(Mapper::getJsonFor($access))
-			->setBucket($this->getBucketName($access))
-			->execute();
+		return $this->insertAccess($access, -1);
 	}
 	
 	/**
