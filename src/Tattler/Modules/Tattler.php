@@ -56,6 +56,7 @@ class Tattler implements ITattler
 			'tattlerUri' => $this->getHttpAddress() . self::ROOMS_ENDPOINT,
 			'payload'    => [
 				'client' => ['socketId' => $socketId, 'sessionId' => $userToken],
+				'secret' => self::$config->Secret,
 				'rooms'  => implode(',', $channels),
 				'root'   => self::$config->Namespace
 			]
@@ -110,7 +111,7 @@ class Tattler implements ITattler
 	 */
 	public function getWsAddress()
 	{
-		return (self::$config->Secure ? ITattler::WSS_PROTOCOL : ITattler::WS_PROTOCOL) . 
+		return (self::$config->Secure ? ITattler::WSS_PROTOCOL : ITattler::WS_PROTOCOL) .
 			'//' . $this->getServerURI();
 	}
 	
@@ -135,7 +136,7 @@ class Tattler implements ITattler
 			[
 				'r' => mt_rand(),
 				'exp' => strtotime('now') + $ttl
-				],
+			],
 			$secret
 		);
 	}
@@ -257,7 +258,12 @@ class Tattler implements ITattler
 			
 			$tattlerBag = [
 				'tattlerUri' => $this->getHttpAddress() . self::EMIT_ENDPOINT,
-				'payload'    => ['root' => self::$config->Namespace, 'room' => $channel, 'bag' => $bag],
+				'payload'    => [
+					'root' => self::$config->Namespace,
+					'secret' => self::$config->Secret,
+					'room' => $channel,
+					'bag' => $bag
+				],
 			];
 			
 			$result = Common::network()->sendPayload($tattlerBag) & $result;
