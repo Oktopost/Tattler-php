@@ -2,12 +2,14 @@
 namespace Tattler\Decorators\DB;
 
 
-use ReflectionClass;
-use Predis\Client;
-use Objection\Mapper;
-use Objection\LiteObject;
 use Tattler\Objects\TattlerAccess;
 use Tattler\Base\Decorators\IDBDecorator;
+
+use Objection\Mapper;
+use Objection\LiteObject;
+
+use Predis\Client;
+use ReflectionClass;
 
 
 /**
@@ -19,6 +21,7 @@ class RedisDecorator implements IDBDecorator
 
     private $prefix;
 
+    
     /**
      * Redis constructor.
      * @param string $host

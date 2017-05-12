@@ -2,9 +2,10 @@
 namespace Tattler\Decorators\DB;
 
 
-use Squid\Object\IObjectConnector;
 use Tattler\Base\Decorators\IDBDecorator;
 use Tattler\Objects\TattlerAccess;
+
+use Squid\Object\IObjectConnector;
 
 
 /**
@@ -87,10 +88,11 @@ class SquidDecorator implements IDBDecorator
     /**
      * @param string $userToken
      * @param bool   $unlock
-     * @return bool|TattlerAccess[]
+     * @return TattlerAccess[]|bool|
      */
     public function loadAllChannels($userToken, $unlock = true)
     {
+    	/** @var TattlerAccess[] $result */
         $result = $this->db->loadAllByFields([
             'UserToken' => $userToken,
             'IsLocked' => 0
