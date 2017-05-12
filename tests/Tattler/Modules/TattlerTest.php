@@ -25,9 +25,8 @@ class TattlerTest extends PHPUnit_Framework_TestCase
 	{
 		$result = new TattlerConfig();
 		$result->Namespace = 'Test';
-		$result->Port = 80;
-		$result->Secure = false;
-		$result->Server = 'localhost.domain.tld';
+		$result->WsAddress = 'ws://localhost.domain.tld';
+		$result->ApiAddress = 'http://localhost.domain.tld';
 		$result->Secret = uniqid();
 		
 		return $result;
@@ -63,35 +62,9 @@ class TattlerTest extends PHPUnit_Framework_TestCase
 	public function test_getWsAddress_should_return_WS_address()
 	{
 		$result = $this->tattler->getWsAddress();
-		$config = $this->getConfig();
-		self::assertEquals('ws://' . $config->Server . ':' . $config->Port, $result);
+		self::assertEquals('ws://localhost.domain.tld', $result);
 	}
 	
-	public function test_getWsAddress_should_return_WSS_address()
-	{
-		$config = $this->getConfig();
-		$config->Secure = true;
-		$this->tattler->setConfig($config);
-		$result = $this->tattler->getWsAddress();
-		self::assertEquals('wss://' . $config->Server . ':' . $config->Port, $result);
-	}
-	
-	public function test_getHttpAddress_should_return_HTTP_address()
-	{
-		$result = $this->tattler->getHttpAddress();
-		$config = $this->getConfig();
-		self::assertEquals('http://' . $config->Server . ':' . $config->Port, $result);
-	}
-	
-	public function test_getHttpAddress_should_return_HTTPS_address()
-	{
-		$config = $this->getConfig();
-		$config->Secure = true;
-		$config->Port = null;
-		$this->tattler->setConfig($config);
-		$result = $this->tattler->getHttpAddress();
-		self::assertEquals('https://' . $config->Server . ':' . ITattler::DEFAULT_SECURE_PORT, $result);
-	}
 	
 	public function test_getSavedChannels_should_return_array()
 	{

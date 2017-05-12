@@ -2,33 +2,31 @@
 namespace Tattler\Objects;
 
 
-use Objection\LiteSetup;
 use Objection\LiteObject;
+use Objection\LiteSetup;
 
 
 /**
- * @property string $Server
- * @property int    $Port
- * @property bool   $Secure
+ * @property string $WsAddress
+ * @property string $ApiAddress
  * @property string $Namespace
  * @property string $Secret
- * @property int	$TokenTTL
+ * @property int $TokenTTL
  */
 class TattlerConfig extends LiteObject
 {
-    /**
-     * @return array
-     */
-    protected function _setup()
-    {
-        return [
-            'Server'    => LiteSetup::createString(),
-            'Port'      => LiteSetup::createInt(),
-            'Secure'    => LiteSetup::createBool(),
-            'Namespace' => LiteSetup::createString(),
-            'Secret'    => LiteSetup::createString(),
-			'TokenTTL'	=> LiteSetup::createInt(60)
-        ];
-    }
-
+	/**
+	 * @return array
+	 */
+	protected function _setup()
+	{
+		return [
+			'WsAddress'  => LiteSetup::createString(),
+			'ApiAddress' => LiteSetup::createString(),
+			'Namespace'  => LiteSetup::createString(),
+			'Secret'     => LiteSetup::createString(),
+			'TokenTTL'   => LiteSetup::createInt(60)
+		];
+	}
+	
 }

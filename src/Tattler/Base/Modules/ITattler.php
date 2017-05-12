@@ -37,11 +37,7 @@ interface ITattler
      * @return string
      */
     public function getWsAddress();
-
-    /**
-     * @return string
-     */
-    public function getHttpAddress();
+	
 	
 	/**
 	 * @return string

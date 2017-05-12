@@ -21,7 +21,8 @@ class DummyControllerExample
 	{
 		$this->tattler = Common::skeleton(ITattler::class);
 		$config = new TattlerConfig();
-//		$config->Server = 'https://domain.tld/...';
+//		$config->WsAddress = 'wss://domain.tld/...';
+//      $config->ApiAddress = 'https://domain.tld/...';
 //		$config->...
 		$this->tattler->setConfig($config);
 	}

@@ -2,17 +2,14 @@
 namespace Tattler\Modules;
 
 
-use Tattler\Common;
-
+use Firebase\JWT\JWT;
 use Tattler\Base\Channels\IChannel;
 use Tattler\Base\Channels\IUser;
 use Tattler\Base\Modules\ITattler;
 use Tattler\Base\Objects\ITattlerMessage;
-
 use Tattler\Channels\Broadcast;
+use Tattler\Common;
 use Tattler\Objects\TattlerConfig;
-
-use Firebase\JWT\JWT;
 
 
 /**
@@ -21,7 +18,7 @@ use Firebase\JWT\JWT;
 class Tattler implements ITattler
 {
 	const ROOMS_ENDPOINT = '/tattler/rooms';
-	const EMIT_ENDPOINT = '/tattler/emit';
+	const EMIT_ENDPOINT  = '/tattler/emit';
 	
 	
 	/** @var TattlerConfig $config */
@@ -43,6 +40,11 @@ class Tattler implements ITattler
 	private $message;
 	
 	
+	private function getApiAddress()
+	{
+		return self::$config->ApiAddress;
+	}
+	
 	/**
 	 * @param array $channels
 	 * @return array
@@ -53,7 +55,7 @@ class Tattler implements ITattler
 		$socketId = $this->currentUser->getSocketId();
 		
 		$tattlerBag = [
-			'tattlerUri' => $this->getHttpAddress() . self::ROOMS_ENDPOINT,
+			'tattlerUri' => $this->getApiAddress() . self::ROOMS_ENDPOINT,
 			'payload'    => [
 				'client' => ['socketId' => $socketId, 'sessionId' => $userToken],
 				'secret' => self::$config->Secret,
@@ -71,29 +73,8 @@ class Tattler implements ITattler
 	{
 		$this->targetChannels = [];
 		$this->message = null;
-		
 		return;
 	}
-	
-	/**
-	 * @return string
-	 */
-	private function getServerURI()
-	{
-		$server = self::$config->Server;
-		
-		if (self::$config->Port != 0)
-		{
-			$port = self::$config->Port;
-		}
-		else
-		{
-			$port = self::$config->Secure ? ITattler::DEFAULT_SECURE_PORT : ITattler::DEFAULT_PORT;
-		}
-		
-		return $server . ':' . $port;
-	}
-	
 	
 	/**
 	 * @param TattlerConfig $config
@@ -102,7 +83,6 @@ class Tattler implements ITattler
 	public function setConfig(TattlerConfig $config)
 	{
 		self::$config = $config;
-		
 		return $this;
 	}
 	
@@ -111,17 +91,7 @@ class Tattler implements ITattler
 	 */
 	public function getWsAddress()
 	{
-		return (self::$config->Secure ? ITattler::WSS_PROTOCOL : ITattler::WS_PROTOCOL) .
-			'//' . $this->getServerURI();
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function getHttpAddress()
-	{
-		return (self::$config->Secure ? ITattler::HTTPS_PROTOCOL : ITattler::HTTP_PROTOCOL) . 
-			'//' . $this->getServerURI();
+		return self::$config->WsAddress;
 	}
 	
 	/**
@@ -134,7 +104,7 @@ class Tattler implements ITattler
 		
 		return JWT::encode(
 			[
-				'r' => mt_rand(),
+				'r'   => mt_rand(),
 				'exp' => strtotime('now') + $ttl
 			],
 			$secret
@@ -257,12 +227,12 @@ class Tattler implements ITattler
 			$bag['room'] = $channel;
 			
 			$tattlerBag = [
-				'tattlerUri' => $this->getHttpAddress() . self::EMIT_ENDPOINT,
+				'tattlerUri' => $this->getApiAddress() . self::EMIT_ENDPOINT,
 				'payload'    => [
-					'root' => self::$config->Namespace,
+					'root'   => self::$config->Namespace,
 					'secret' => self::$config->Secret,
-					'room' => $channel,
-					'bag' => $bag
+					'room'   => $channel,
+					'bag'    => $bag
 				],
 			];
 			
