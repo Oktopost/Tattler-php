@@ -133,9 +133,7 @@
 		var callbacks = {
 			getWs: {
 				onSuccess: function (data) {
-					var parsedURI = parseURI(data.ws);
-					manufactory.server = parsedURI.protocol + '//' + parsedURI.hostname;
-					manufactory.port = parsedURI.port;
+					manufactory.server = data.ws;
 
 					connectToSocket();
 				},
@@ -383,7 +381,7 @@
 				}
 
 				getJWT(function (token) {
-					manufactory.socket = io(manufactory.server + ':' + manufactory.port,
+					manufactory.socket = io(manufactory.server,
 						{
 							query: 'token=' + token
 						}
@@ -391,7 +389,7 @@
 					manufactory.socket.on('connect', callbacks.socket.connected);
 					manufactory.socket.on('disconnect', callbacks.socket.disconnected);
 
-					log('info', 'connecting to socket at ' + manufactory.server + ':' + manufactory.port);
+					log('info', 'connecting to socket at ' + manufactory.server);
 				});
 			} else {
 				log('error', 'socket already connected');
