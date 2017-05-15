@@ -25,6 +25,7 @@ class ZF1HttpClientDecorator implements INetworkDecorator
 		$this->client = new Zend_Http_Client();
 	}
 	
+	
 	/**
 	 * @param array $tattlerBag
 	 * @return bool
@@ -35,8 +36,17 @@ class ZF1HttpClientDecorator implements INetworkDecorator
 			->setUri($tattlerBag['tattlerUri'])
 			->setMethod(\Zend_Http_Client::POST)
 			->setHeaders($this->getHeaders())
-			->setRawData(json_encode($tattlerBag['payload']))
-			->request();
+			->setRawData(json_encode($tattlerBag['payload']));
+		
+		try
+		{
+			$this->client->request();
+		}
+		catch (\Exception $e)
+		{
+			return false;
+		}
+		
 		
 		if ($this->client->getLastResponse()->getStatus() == 200)
 		{
@@ -61,13 +71,21 @@ class ZF1HttpClientDecorator implements INetworkDecorator
 			->setUri($tattlerBag['tattlerUri'])
 			->setMethod(\Zend_Http_Client::POST)
 			->setHeaders($this->getHeaders())
-			->setRawData(json_encode($tattlerBag['payload']))
-			->request();
+			->setRawData(json_encode($tattlerBag['payload']));
 		
+		try
+		{
+			$this->client->request();
+		}
+		catch (\Exception $e)
+		{
+			return false;
+		}
 		
 		if ($this->client->getLastResponse()->getStatus() == 200)
 		{
 			$body = json_decode($this->client->getLastResponse()->getBody(), true);
+			
 			return isset($body['rooms']) ? $body['rooms'] : false;
 		}
 		

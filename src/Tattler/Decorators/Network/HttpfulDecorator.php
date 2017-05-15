@@ -18,11 +18,18 @@ class HttpfulDecorator implements INetworkDecorator
      */
     public function sendPayload(array $tattlerBag)
     {
+    	try
+		{
         $result = Request::post($tattlerBag['tattlerUri'])
             ->body($tattlerBag['payload'])
             ->sendsAndExpectsType(Mime::JSON)
             ->send();
-
+		}
+		catch (\Exception $e)
+		{
+			return false;
+		}
+		
         if ($result->hasErrors())
             return false;
 
@@ -35,10 +42,17 @@ class HttpfulDecorator implements INetworkDecorator
      */
     public function syncChannels(array $tattlerBag)
     {
+    	try
+		{
         $result = Request::post($tattlerBag['tattlerUri'])
             ->body($tattlerBag['payload'])
             ->sendsAndExpectsType(Mime::JSON)
             ->send();
+		}
+		catch (\Exception $e)
+		{
+			return false;
+		}
 
         if ($result->hasErrors())
             return false;
