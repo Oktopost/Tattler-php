@@ -1,7 +1,7 @@
 <?php namespace Tests\Tattler\Modules;
 
 
-use Tattler\Common;
+use Tattler\SkeletonInit;
 use Tattler\Channels\Broadcast;
 use Tattler\Base\Channels\IRoom;
 use Tattler\Objects\TattlerConfig;
@@ -38,7 +38,7 @@ class TattlerTest extends PHPUnit_Framework_TestCase
 	private function getDummyMessage()
 	{
 		/** @var ITattlerMessage $message */
-		$message = Common::skeleton(ITattlerMessage::class);
+		$message = SkeletonInit::skeleton(ITattlerMessage::class);
 		$message->setPayload(['some', 'random', 'data']);
 		
 		return $message;
@@ -49,7 +49,7 @@ class TattlerTest extends PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 		
-		$this->tattler = Common::skeleton(ITattler::class);
+		$this->tattler = SkeletonInit::skeleton(ITattler::class);
 		$this->tattler->setConfig($this->getConfig());
 	}
 	

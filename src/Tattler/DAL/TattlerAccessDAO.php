@@ -1,11 +1,12 @@
 <?php namespace Tattler\DAL;
 
 
-use Tattler\Common;
+use Tattler\SkeletonInit;
+use Tattler\Objects\TattlerAccess;
+
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\DAL\ITattlerAccessDAO;
 use Tattler\Base\Decorators\IDBDecorator;
-use Tattler\Objects\TattlerAccess;
 
 
 /**
@@ -25,7 +26,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
      */
     public function __construct()
     {
-        $this->decorator = Common::database();
+        $this->decorator = SkeletonInit::skeleton(IDBDecorator::class);
         $this->removeOld();
     }
 
@@ -89,7 +90,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         foreach ($query as $item)
         {
             /** @var IRoom $room */
-            $room = Common::skeleton(IRoom::class);
+            $room = SkeletonInit::skeleton(IRoom::class);
             $room->setName($item->Channel);
             $result[] = $room;
         }

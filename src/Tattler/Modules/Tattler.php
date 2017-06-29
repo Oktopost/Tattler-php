@@ -2,14 +2,17 @@
 namespace Tattler\Modules;
 
 
-use Firebase\JWT\JWT;
-use Tattler\Base\Channels\IChannel;
+use Tattler\SkeletonInit;
+use Tattler\Channels\Broadcast;
+use Tattler\Objects\TattlerConfig;
+
 use Tattler\Base\Channels\IUser;
+use Tattler\Base\Channels\IChannel;
 use Tattler\Base\Modules\ITattler;
 use Tattler\Base\Objects\ITattlerMessage;
-use Tattler\Channels\Broadcast;
-use Tattler\Common;
-use Tattler\Objects\TattlerConfig;
+use Tattler\Base\Decorators\INetworkDecorator;
+
+use Firebase\JWT\JWT;
 
 
 /**
@@ -64,9 +67,9 @@ class Tattler implements ITattler
 			]
 		];
 		
-		$result = Common::network()->syncChannels($tattlerBag);
-		
-		return $result ? $result : [];
+		/** @var INetworkDecorator $result */
+		$network = SkeletonInit::skeleton(INetworkDecorator::class);
+		return $network->syncChannels($tattlerBag) ?? [];
 	}
 	
 	private function reset()
@@ -222,6 +225,8 @@ class Tattler implements ITattler
 		
 		$result = true;
 		
+		$network = SkeletonInit::skeleton(INetworkDecorator::class);
+		
 		foreach ($targetChannels as $channel)
 		{
 			$bag['room'] = $channel;
@@ -236,7 +241,7 @@ class Tattler implements ITattler
 				],
 			];
 			
-			$result = Common::network()->sendPayload($tattlerBag) & $result;
+			$result = $network->sendPayload($tattlerBag) & $result;
 		}
 		
 		return (bool)$result;

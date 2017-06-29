@@ -1,16 +1,20 @@
 <?php
+use Tattler\SkeletonInit;
 
-
-use Tattler\Common;
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\Channels\IUser;
+
+use Tattler\Base\Decorators\IDBDecorator;
+use Tattler\Base\Decorators\INetworkDecorator;
+
+use Skeleton\Type;
 
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 
-Common::database(new \Tests\Tattler\Decorators\DB\DummyDecorator());
-Common::network(new \Tests\Tattler\Decorators\Network\DummyDecorator());
+SkeletonInit::skeleton()->set(IDBDecorator::class, Tests\Tattler\Decorators\DB\DummyDecorator::class, Type::Singleton);
+SkeletonInit::skeleton()->set(INetworkDecorator::class, Tests\Tattler\Decorators\Network\DummyDecorator::class);
 
 
 /**
@@ -19,7 +23,7 @@ Common::network(new \Tests\Tattler\Decorators\Network\DummyDecorator());
 function getDummyUser()
 {
 	/** @var IUser $user */
-	$user = Common::skeleton(IUser::class);
+	$user = SkeletonInit::skeleton(IUser::class);
 	$user->setName(uniqId(), uniqId(), uniqId());
 	
 	return $user;
@@ -31,6 +35,6 @@ function getDummyUser()
 function getDummyRoom()
 {
 	/** @var IRoom $result */
-	$result = Common::skeleton(IRoom::class);
+	$result = SkeletonInit::skeleton(IRoom::class);
 	return $result;
 }

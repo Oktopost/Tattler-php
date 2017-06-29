@@ -1,7 +1,7 @@
 <?php
 
 
-use Tattler\Common;
+use Tattler\SkeletonInit;
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\Channels\IUser;
 use Tattler\Base\Modules\ITattler;
@@ -19,7 +19,7 @@ class DummyControllerExample
 	
 	public function __construct()
 	{
-		$this->tattler = Common::skeleton(ITattler::class);
+		$this->tattler = SkeletonInit::skeleton(ITattler::class);
 		$config = new TattlerConfig();
 //		$config->WsAddress = 'wss://domain.tld/...';
 //      $config->ApiAddress = 'https://domain.tld/...';
@@ -52,14 +52,14 @@ class DummyControllerExample
 	public function getChannels($socketId, $channels = null)
 	{
 		/** @var IUser $user */
-		$user = Common::skeleton(IUser::class);
+		$user = SkeletonInit::skeleton(IUser::class);
 		$user->setName('current', 'user', 'name', 'with', 'any', 'args')
 			->setSocketId($socketId);
 		
 		$this->tattler->setUser($user);
 		
 		/** @var IRoom $newRoom */
-		$newRoom = Common::skeleton(IRoom::class);
+		$newRoom = SkeletonInit::skeleton(IRoom::class);
 		$newRoom->setName('newRoom')->allow($user);
 		
 		return ['channels' => $this->tattler->getChannels($channels)];

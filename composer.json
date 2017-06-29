@@ -3,10 +3,10 @@
 	"description": "PHP Tattler client",
 	"type": "library",
 	"require": {
-		"php": ">=5.6-stable",
+		"php": ">=7.1-stable",
 		"00f100/uuid": "4.0.0",
 		"oktopost/objection": "^1.0",
-		"oktopost/skeleton": "^1.0",
+		"oktopost/skeleton": "^1.0.10",
 		"firebase/php-jwt": "^4.0"
 	},
 	"require-dev": {
