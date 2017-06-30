@@ -20,8 +20,8 @@ use Firebase\JWT\JWT;
  */
 class Tattler implements ITattler
 {
-	const ROOMS_ENDPOINT = '/tattler/rooms';
-	const EMIT_ENDPOINT  = '/tattler/emit';
+	private const ROOMS_ENDPOINT = '/tattler/rooms';
+	private const EMIT_ENDPOINT  = '/tattler/emit';
 	
 	
 	/** @var TattlerConfig $config */
@@ -43,16 +43,12 @@ class Tattler implements ITattler
 	private $message;
 	
 	
-	private function getApiAddress()
+	private function getApiAddress(): string
 	{
 		return self::$config->ApiAddress;
 	}
 	
-	/**
-	 * @param array $channels
-	 * @return array
-	 */
-	private function syncChannels($channels)
+	private function syncChannels(array $channels): array
 	{
 		$userToken = $this->currentUser->getName();
 		$socketId = $this->currentUser->getSocketId();
@@ -72,35 +68,25 @@ class Tattler implements ITattler
 		return $network->syncChannels($tattlerBag) ?? [];
 	}
 	
-	private function reset()
+	private function reset(): void
 	{
 		$this->targetChannels = [];
 		$this->message = null;
 		return;
 	}
 	
-	/**
-	 * @param TattlerConfig $config
-	 * @return static
-	 */
-	public function setConfig(TattlerConfig $config)
+	public function setConfig(TattlerConfig $config): ITattler
 	{
 		self::$config = $config;
 		return $this;
 	}
 	
-	/**
-	 * @return string
-	 */
-	public function getWsAddress()
+	public function getWsAddress(): string
 	{
 		return self::$config->WsAddress;
 	}
 	
-	/**
-	 * @return string
-	 */
-	public function getJWTToken()
+	public function getJWTToken(): string
 	{
 		$secret = self::$config->Secret;
 		$ttl = (int)self::$config->TokenTTL;
@@ -114,21 +100,12 @@ class Tattler implements ITattler
 		);
 	}
 	
-	/**
-	 * @param IUser $user
-	 * @param bool $unlock
-	 * @return IChannel[]|[]
-	 */
-	public function getSavedChannels(IUser $user, $unlock = true)
+	public function getSavedChannels(IUser $user, bool $unlock = true): array
 	{
 		return $this->accessDAO->loadAllChannels($user->getName(), $unlock);
 	}
 	
-	/**
-	 * @param IUser $user
-	 * @return string[]
-	 */
-	public function getDefaultChannels(IUser $user)
+	public function getDefaultChannels(IUser $user): array
 	{
 		return [
 			$user->getName(),
@@ -136,11 +113,7 @@ class Tattler implements ITattler
 		];
 	}
 	
-	/**
-	 * @param array $filter
-	 * @return string[]|[]
-	 */
-	public function getChannels($filter = [])
+	public function getChannels(?array $filter = []): array
 	{
 		$result = $this->syncChannels(array_unique(array_merge(
 			$this->accessDAO->loadAllChannelNames($this->currentUser->getName()),
@@ -158,64 +131,37 @@ class Tattler implements ITattler
 		return $result;
 	}
 	
-	/**
-	 * @param IUser $user
-	 * @return static
-	 */
-	public function setUser(IUser $user)
+	public function setUser(IUser $user): ITattler
 	{
 		$this->currentUser = $user;
-		
 		return $this;
 	}
 	
-	/**
-	 * @return static
-	 */
-	public function broadcast()
+	public function broadcast(): ITattler
 	{
 		$this->targetChannels[] = Broadcast::BROADCAST_NAME;
-		
 		return $this;
 	}
 	
-	/**
-	 * @param IChannel $room
-	 * @return static
-	 */
-	public function room(IChannel $room)
+	public function room(IChannel $room): ITattler
 	{
 		$this->targetChannels[] = $room->getName();
-		
 		return $this;
 	}
 	
-	/**
-	 * @param IUser $user
-	 * @return static
-	 */
-	public function user(IUser $user)
+	public function user(IUser $user): ITattler
 	{
 		$this->targetChannels[] = $user->getName();
-		
 		return $this;
 	}
 	
-	/**
-	 * @param ITattlerMessage $message
-	 * @return static
-	 */
-	public function message(ITattlerMessage $message)
+	public function message(ITattlerMessage $message): ITattler
 	{
 		$this->message = $message->toArray();
-		
 		return $this;
 	}
 	
-	/**
-	 * @return bool
-	 */
-	public function say()
+	public function say(): bool
 	{
 		$targetChannels = $this->targetChannels;
 		$bag = $this->message;

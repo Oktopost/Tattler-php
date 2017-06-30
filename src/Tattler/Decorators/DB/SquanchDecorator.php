@@ -13,26 +13,18 @@ class SquanchDecorator implements IDBDecorator
 	/** @var ICachePlugin */
 	private $client;
 	
+	/** @var string  */
 	private $bucket;
 	
 	
-	/**
-	 * @param ICachePlugin $squanch
-	 * @param string $bucketName
-	 */
-	public function __construct(ICachePlugin $squanch, $bucketName = 'tattler-php')
+	public function __construct(ICachePlugin $squanch, string $bucketName = 'tattler-php')
 	{
 		$this->client = $squanch;
 		$this->bucket = $bucketName;
 	}
 	
 	
-	/**
-	 * @param TattlerAccess $access
-	 * @param int $ttl
-	 * @return bool
-	 */
-	public function insertAccess(TattlerAccess $access, $ttl)
+	public function insertAccess(TattlerAccess $access, int $ttl): bool
 	{
 		$items = $this->client
 			->get($access->UserToken, $this->bucket)
@@ -64,21 +56,12 @@ class SquanchDecorator implements IDBDecorator
 			->save();
 	}
 	
-	/**
-	 * @param TattlerAccess $access
-	 * @param int $newTTL
-	 * @return bool
-	 */
-	public function updateAccessTTL(TattlerAccess $access, $newTTL)
+	public function updateAccessTTL(TattlerAccess $access, int $newTTL): bool
 	{
 		return $this->insertAccess($access, $newTTL);
 	}
 	
-	/**
-	 * @param TattlerAccess $access
-	 * @return bool
-	 */
-	public function accessExists(TattlerAccess $access)
+	public function accessExists(TattlerAccess $access): bool
 	{
 		$items = $this->client->get()
 			->byKey($access->UserToken)
@@ -99,11 +82,7 @@ class SquanchDecorator implements IDBDecorator
 		return false;
 	}
 	
-	/**
-	 * @param TattlerAccess $access
-	 * @return bool
-	 */
-	public function deleteAccess(TattlerAccess $access)
+	public function deleteAccess(TattlerAccess $access): bool
 	{
 		$items = $this->client->get($access->UserToken, $this->bucket)->asLiteObjects(TattlerAccess::class);
 		
@@ -130,12 +109,7 @@ class SquanchDecorator implements IDBDecorator
 		return true;
 	}
 	
-	/**
-	 * @param string $userToken
-	 * @param bool $unlock
-	 * @return TattlerAccess[]|bool
-	 */
-	public function loadAllChannels($userToken, $unlock = true)
+	public function loadAllChannels(string $userToken, bool $unlock = true): array
 	{
 		$data = $this->client->get()
 			->byKey($userToken)
@@ -143,7 +117,7 @@ class SquanchDecorator implements IDBDecorator
 			->asLiteObjects(TattlerAccess::class);
 		
 		if (!$data)
-			return false;
+			return [];
 		
 		$locked = [];
 		
@@ -166,33 +140,21 @@ class SquanchDecorator implements IDBDecorator
 		return $data;
 	}
 	
-	/**
-	 * @param TattlerAccess $access
-	 * @return bool
-	 */
-	public function lock(TattlerAccess $access)
+	public function lock(TattlerAccess $access): bool
 	{
 		$access->IsLocked = true;
 		
 		return $this->insertAccess($access, -1);
 	}
 	
-	/**
-	 * @param TattlerAccess $access
-	 * @return bool
-	 */
-	public function unlock(TattlerAccess $access)
+	public function unlock(TattlerAccess $access): bool
 	{
 		$access->IsLocked = false;
 		
 		return $this->insertAccess($access, -1);
 	}
 	
-	/**
-	 * @param int $maxTTL
-	 * @return bool
-	 */
-	public function removeGarbage($maxTTL)
+	public function removeGarbage(int $maxTTL): bool
 	{
 		return true;
 	}

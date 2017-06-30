@@ -10,54 +10,12 @@ use Tattler\Objects\TattlerAccess;
  */
 interface IDBDecorator
 {
-    /**
-     * @param TattlerAccess $access
-     * @param  int $ttl
-     * @return bool
-     */
-    public function insertAccess(TattlerAccess $access, $ttl);
-
-    /**
-     * @param TattlerAccess $access
-     * @param int           $newTTL
-     * @return mixed
-     */
-    public function updateAccessTTL(TattlerAccess $access, $newTTL);
-
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function accessExists(TattlerAccess $access);
-
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function deleteAccess(TattlerAccess $access);
-
-    /**
-     * @param string $userToken
-     * @param bool   $unlock
-     * @return bool|TattlerAccess[]
-     */
-    public function loadAllChannels($userToken, $unlock = true);
-
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function lock(TattlerAccess $access);
-
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function unlock(TattlerAccess $access);
-
-    /**
-     * @param int $maxTTL
-     * @return bool
-     */
-    public function removeGarbage($maxTTL);
+    public function insertAccess(TattlerAccess $access, int $ttl): bool;
+    public function updateAccessTTL(TattlerAccess $access, int $newTTL): bool;
+    public function accessExists(TattlerAccess $access): bool;
+    public function deleteAccess(TattlerAccess $access): bool;
+	public function loadAllChannels(string $userToken, bool $unlock = true): array;
+	public function lock(TattlerAccess $access): bool;
+    public function unlock(TattlerAccess $access): bool;
+    public function removeGarbage(int $maxTTL): bool;
 }

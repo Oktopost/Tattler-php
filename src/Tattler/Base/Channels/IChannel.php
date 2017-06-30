@@ -7,32 +7,9 @@ namespace Tattler\Base\Channels;
  */
 interface IChannel
 {
-    /**
-     * @param array $channelNameArgs
-     * @return static
-     */
-    public function setName(...$channelNameArgs);
-
-    /**
-     * @return string
-     */
-    public function getName();
-
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function allow(IUser $user);
-
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function deny(IUser $user);
-
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function isAllowed(IUser $user);
+	public function setName(...$channelNameArgs): IChannel;
+	public function getName(): string;
+	public function allow(IUser $user): bool;
+	public function deny(IUser $user): bool;
+	public function isAllowed(IUser $user): bool;
 }

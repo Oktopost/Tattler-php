@@ -15,46 +15,27 @@ class Broadcast implements IChannel
     const BROADCAST_NAME = 'broadcast';
 
 
-    /**
-     * @param array $channelNameArgs
-     * @return static
-     */
-    public function setName(...$channelNameArgs)
+    public function setName(...$channelNameArgs): IChannel
     {
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string 
     {
         return self::BROADCAST_NAME;
     }
 
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function allow(IUser $user)
+    public function allow(IUser $user): bool
     {
         return true;
     }
 
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function deny(IUser $user)
+    public function deny(IUser $user): bool
     {
         return false;
     }
 
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function isAllowed(IUser $user)
+    public function isAllowed(IUser $user): bool
     {
         return true;
     }

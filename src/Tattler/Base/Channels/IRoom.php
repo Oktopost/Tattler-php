@@ -1,4 +1,5 @@
-<?php namespace Tattler\Base\Channels;
+<?php 
+namespace Tattler\Base\Channels;
 
 
 /**
@@ -6,9 +7,5 @@
  */
 interface IRoom extends IChannel
 {
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function lock(IUser $user);
+    public function lock(IUser $user): bool;
 }

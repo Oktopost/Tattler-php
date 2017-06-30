@@ -4,6 +4,8 @@ namespace Tattler\Channels;
 
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\Channels\IUser;
+use Tattler\Base\Channels\IChannel;
+
 use Tattler\Objects\TattlerAccess;
 
 
@@ -36,20 +38,13 @@ class Room implements IRoom
     }
 
 
-    /**
-     * @param array $channelNameArgs
-     * @return static
-     */
-    public function setName(...$channelNameArgs)
+    public function setName(...$channelNameArgs): IChannel
     {
         $this->name = implode(':', $channelNameArgs);
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         if (!$this->name)
         {
@@ -59,38 +54,22 @@ class Room implements IRoom
         return $this->name;
     }
 
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function allow(IUser $user)
+    public function allow(IUser $user): bool
     {
         return $this->accessDAO->allow($this->getAccessObject($user->getName()));
     }
 
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function deny(IUser $user)
+    public function deny(IUser $user): bool
     {
         return $this->accessDAO->deny($this->getAccessObject($user->getName()));
     }
 
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function isAllowed(IUser $user)
+    public function isAllowed(IUser $user): bool
     {
         return $this->accessDAO->exists($this->getAccessObject($user->getName()));
     }
 
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function lock(IUser $user)
+    public function lock(IUser $user): bool
     {
         return $this->accessDAO->lock($this->getAccessObject($user->getName()));
     }

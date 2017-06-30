@@ -1,7 +1,7 @@
 <?php
 namespace Tattler\Base\DAL;
 
-use Tattler\Base\Channels\IChannel;
+
 use Tattler\Objects\TattlerAccess;
 
 
@@ -10,46 +10,11 @@ use Tattler\Objects\TattlerAccess;
  */
 interface ITattlerAccessDAO
 {
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function allow(TattlerAccess $access);
-
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function deny(TattlerAccess $access);
-
-    /**
-     * @param      $userToken
-     * @param bool $unlock
-     * @return IChannel[]|[]
-     */
-    public function loadAllChannels($userToken, $unlock = true);
-
-    /**
-     * @param      $userToken
-     * @param bool $unlock
-     * @return array
-     */
-    public function loadAllChannelNames($userToken, $unlock = true);
-
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function lock(TattlerAccess $access);
-
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function exists(TattlerAccess $access);
-
-    /**
-     * @return bool
-     */
-    public function removeOld();
+    public function allow(TattlerAccess $access): bool;
+    public function deny(TattlerAccess $access): bool;
+	public function loadAllChannels(string $userToken, bool $unlock = true): array;
+    public function loadAllChannelNames(string $userToken, bool $unlock = true): array;
+    public function lock(TattlerAccess $access): bool;
+    public function exists(TattlerAccess $access): bool;
+    public function removeOld(): bool;
 }

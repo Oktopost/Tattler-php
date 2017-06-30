@@ -27,44 +27,27 @@ class TattlerMessage extends LiteObject implements ITattlerMessage
     }
 
 
-    /**
-     * @param $handler
-     * @return static
-     */
-    public function setHandler($handler)
+    public function setHandler(string $handler): ITattlerMessage
     {
         $this->handler = $handler;
         return $this;
     }
 
-    /**
-     * @param null $namespace
-     * @return static
-     */
-    public function setNamespace($namespace = null)
+    public function setNamespace(?string $namespace = null): ITattlerMessage
     {
         $this->namespace = $namespace;
         return $this;
     }
 
-    /**
-     * @param array $payload
-     * @return static
-     */
-    public function setPayload(array $payload)
+    public function setPayload(array $payload): ITattlerMessage
     {
         $this->payload = $payload;
         return $this;
     }
 
-    /**
-     * @param array $filter
-     * @param array $exclude
-     * @return array
-     */
-    public function toArray(array $filter = [], array $exclude = [])
+    public function toArray(array $filter = [], array $exclude = []): array
     {
-        if ($this->namespace == null)
+        if (!$this->namespace)
         {
             $this->namespace = ITattlerMessage::DEFAULT_NAMESPACE;
         }

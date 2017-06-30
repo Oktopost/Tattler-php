@@ -12,32 +12,18 @@ class DummyDecorator implements IDBDecorator
     private $accessStorage = [];
 
     
-    /**
-     * @param TattlerAccess $access
-     * @param  int          $ttl
-     * @return bool
-     */
-    public function insertAccess(TattlerAccess $access, $ttl)
+    public function insertAccess(TattlerAccess $access, int $ttl): bool
     {
         $this->accessStorage[] = $access;
         return true;
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @param int           $newTTL
-     * @return mixed
-     */
-    public function updateAccessTTL(TattlerAccess $access, $newTTL)
+    public function updateAccessTTL(TattlerAccess $access, int $newTTL): bool
     {
         return true;
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function accessExists(TattlerAccess $access)
+    public function accessExists(TattlerAccess $access): bool
     {
         /** @var TattlerAccess $item */
         foreach ($this->accessStorage as $item)
@@ -51,11 +37,7 @@ class DummyDecorator implements IDBDecorator
         return false;
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function deleteAccess(TattlerAccess $access)
+    public function deleteAccess(TattlerAccess $access): bool
     {
         /** @var TattlerAccess $item */
         foreach ($this->accessStorage as $key => $item)
@@ -70,12 +52,7 @@ class DummyDecorator implements IDBDecorator
         return false;
     }
 
-    /**
-     * @param string $userToken
-     * @param bool   $unlock
-     * @return bool|TattlerAccess[]
-     */
-    public function loadAllChannels($userToken, $unlock = true)
+    public function loadAllChannels(string $userToken, bool $unlock = true): array
     {
         $result = [];
 
@@ -91,11 +68,7 @@ class DummyDecorator implements IDBDecorator
         return $result;
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function lock(TattlerAccess $access)
+    public function lock(TattlerAccess $access): bool
     {
     	/** @var TattlerAccess $item */
 	    foreach($this->accessStorage as $item)
@@ -110,11 +83,7 @@ class DummyDecorator implements IDBDecorator
 	    return false;
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function unlock(TattlerAccess $access)
+    public function unlock(TattlerAccess $access): bool
     {
 	    /** @var TattlerAccess $item */
 	    foreach($this->accessStorage as $item)
@@ -129,11 +98,7 @@ class DummyDecorator implements IDBDecorator
 	    return false;
     }
 
-    /**
-     * @param int $maxTTL
-     * @return bool
-     */
-    public function removeGarbage($maxTTL)
+    public function removeGarbage(int $maxTTL): bool
     {
         return true;
     }

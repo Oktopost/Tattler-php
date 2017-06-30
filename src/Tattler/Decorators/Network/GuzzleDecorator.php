@@ -30,7 +30,7 @@ class GuzzleDecorator implements INetworkDecorator
      * @param array $tattlerBag
      * @return bool
      */
-    public function sendPayload(array $tattlerBag)
+    public function sendPayload(array $tattlerBag): bool
     {
         $request = new Request('POST', $tattlerBag['tattlerUri']);
         $promise = $this->client->sendAsync($request, ['json' => $tattlerBag['payload'] ]);
@@ -39,11 +39,7 @@ class GuzzleDecorator implements INetworkDecorator
         return true;
     }
 
-    /**
-     * @param array $tattlerBag
-     * @return bool
-     */
-    public function syncChannels(array $tattlerBag)
+    public function syncChannels(array $tattlerBag): ?array
     {
         $request = new Request('POST', $tattlerBag['tattlerUri']);
 
@@ -55,7 +51,7 @@ class GuzzleDecorator implements INetworkDecorator
             }
             catch(\Exception $e)
             {
-                return false;
+                return [];
             }
         };
 

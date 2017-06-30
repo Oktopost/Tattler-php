@@ -12,51 +12,42 @@ use Tattler\Base\Decorators\INetworkDecorator;
  */
 class HttpfulDecorator implements INetworkDecorator
 {
-    /**
-     * @param array $tattlerBag
-     * @return bool
-     */
-    public function sendPayload(array $tattlerBag)
-    {
-    	try
+	public function sendPayload(array $tattlerBag): bool
+	{
+		try 
 		{
-        $result = Request::post($tattlerBag['tattlerUri'])
-            ->body($tattlerBag['payload'])
-            ->sendsAndExpectsType(Mime::JSON)
-            ->send();
-		}
-		catch (\Exception $e)
+			$result = Request::post($tattlerBag['tattlerUri'])
+				->body($tattlerBag['payload'])
+				->sendsAndExpectsType(Mime::JSON)
+				->send();
+		} 
+		catch (\Exception $e) 
 		{
 			return false;
 		}
 		
-        if ($result->hasErrors())
-            return false;
-
-        return true;
-    }
-
-    /**
-     * @param array $tattlerBag
-     * @return bool
-     */
-    public function syncChannels(array $tattlerBag)
-    {
-    	try
-		{
-        $result = Request::post($tattlerBag['tattlerUri'])
-            ->body($tattlerBag['payload'])
-            ->sendsAndExpectsType(Mime::JSON)
-            ->send();
-		}
-		catch (\Exception $e)
-		{
+		if ($result->hasErrors())
 			return false;
+		
+		return true;
+	}
+	
+	public function syncChannels(array $tattlerBag): ?array
+	{
+		try {
+			$result = Request::post($tattlerBag['tattlerUri'])
+				->body($tattlerBag['payload'])
+				->sendsAndExpectsType(Mime::JSON)
+				->send();
+		} 
+		catch (\Exception $e) 
+		{
+			return null;
 		}
-
-        if ($result->hasErrors())
-            return false;
-
-        return $result->body->rooms;
-    }
+		
+		if ($result->hasErrors())
+			return null;
+		
+		return $result->body->rooms;
+	}
 }

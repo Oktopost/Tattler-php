@@ -8,15 +8,6 @@ namespace Tattler\Base\Decorators;
  */
 interface INetworkDecorator
 {
-    /**
-     * @param array $tattlerBag
-     * @return bool
-     */
-    public function sendPayload(array $tattlerBag);
-
-    /**
-     * @param array $tattlerBag
-     * @return array|bool
-     */
-    public function syncChannels(array $tattlerBag);
+    public function sendPayload(array $tattlerBag): bool;
+    public function syncChannels(array $tattlerBag): ?array;
 }

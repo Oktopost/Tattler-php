@@ -1,4 +1,5 @@
-<?php namespace Tattler\Base\Channels;
+<?php 
+namespace Tattler\Base\Channels;
 
 
 use Closure;
@@ -9,20 +10,7 @@ use Closure;
  */
 interface IUser extends IChannel
 {
-    /**
-     * @param Closure $callback
-     * @return static
-     */
-    public function setNameConverter(Closure $callback);
-
-    /**
-     * @param string $socketId
-     * @return static
-     */
-    public function setSocketId($socketId);
-
-    /**
-     * @return string|null
-     */
-    public function getSocketId();
+    public function setNameConverter(Closure $callback): IUser;
+    public function setSocketId($socketId): IUser;
+	public function getSocketId(): ?string;
 }

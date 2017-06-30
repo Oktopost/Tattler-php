@@ -10,20 +10,12 @@ use Tattler\Base\Decorators\INetworkDecorator;
  */
 class DummyDecorator implements INetworkDecorator
 {
-	/**
-	 * @param array $tattlerBag
-	 * @return bool
-	 */
-	public function sendPayload(array $tattlerBag)
+	public function sendPayload(array $tattlerBag): bool
 	{
 		return true;
 	}
 	
-	/**
-	 * @param array $tattlerBag
-	 * @return array|bool
-	 */
-	public function syncChannels(array $tattlerBag)
+	public function syncChannels(array $tattlerBag): ?array
 	{
 		return explode(',', $tattlerBag['payload']['rooms']);
 	}

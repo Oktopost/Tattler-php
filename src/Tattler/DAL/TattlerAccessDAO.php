@@ -1,4 +1,5 @@
-<?php namespace Tattler\DAL;
+<?php 
+namespace Tattler\DAL;
 
 
 use Tattler\SkeletonInit;
@@ -14,7 +15,7 @@ use Tattler\Base\Decorators\IDBDecorator;
  */
 class TattlerAccessDAO implements ITattlerAccessDAO
 {
-    const DATA_TTL = 604800; // week
+    private const DATA_TTL = 604800; // week
 
 
     /** @var IDBDecorator $decorator */
@@ -31,11 +32,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
     }
 
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function allow(TattlerAccess $access)
+    public function allow(TattlerAccess $access): bool
     {
         $exists = $this->exists($access);
 
@@ -50,20 +47,12 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         }
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function exists(TattlerAccess $access)
+    public function exists(TattlerAccess $access): bool
     {
         return $this->decorator->accessExists($access);
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function deny(TattlerAccess $access)
+    public function deny(TattlerAccess $access): bool
     {
         if (!$this->exists($access))
             return true;
@@ -71,12 +60,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         return $this->decorator->deleteAccess($access);
     }
 
-    /**
-     * @param      $userToken
-     * @param bool $unlock
-     * @return IRoom[]|[]
-     */
-    public function loadAllChannels($userToken, $unlock = true)
+    public function loadAllChannels(string $userToken, bool $unlock = true): array
     {
         $result = [];
 
@@ -98,12 +82,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         return $result;
     }
 
-    /**
-     * @param string $userToken
-     * @param bool   $unlock
-     * @return array
-     */
-    public function loadAllChannelNames($userToken, $unlock = true)
+    public function loadAllChannelNames(string $userToken, bool $unlock = true): array
     {
         $result = [];
 
@@ -113,7 +92,6 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         if (!$query)
             return $result;
 
-        /** @var TattlerAccess $item */
         foreach ($query as $item)
         {
             $result[] = $item->Channel;
@@ -122,19 +100,12 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         return $result;
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function lock(TattlerAccess $access)
+    public function lock(TattlerAccess $access): bool 
     {
         return $this->decorator->lock($access);
     }
 
-    /**
-     * @return bool
-     */
-    public function removeOld()
+    public function removeOld(): bool 
     {
         return $this->decorator->removeGarbage(self::DATA_TTL);
     }

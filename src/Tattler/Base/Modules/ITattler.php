@@ -13,88 +13,29 @@ use Tattler\Base\Objects\ITattlerMessage;
  */
 interface ITattler
 {
-    const WS_PROTOCOL = 'ws:';
-
-    const WSS_PROTOCOL = 'wss:';
-
-    const HTTP_PROTOCOL = 'http:';
-
-    const HTTPS_PROTOCOL = 'https:';
-
-    const DEFAULT_PORT = 80;
-
-    const DEFAULT_SECURE_PORT = 443;
+    public const WS_PROTOCOL = 'ws:';
+	public const WSS_PROTOCOL = 'wss:';
+	public const HTTP_PROTOCOL = 'http:';
+	public const HTTPS_PROTOCOL = 'https:';
+	public const DEFAULT_PORT = 80;
+	public const DEFAULT_SECURE_PORT = 443;
 
 
-    /**
-     * @param TattlerConfig $config
-     * @return static
-     */
-    public function setConfig(TattlerConfig $config);
-
-
-    /**
-     * @return string
-     */
-    public function getWsAddress();
+    public function setConfig(TattlerConfig $config): ITattler;
+    public function getWsAddress(): string;
+    public function getJWTToken(): string;
 	
-	
-	/**
-	 * @return string
-	 */
-    public function getJWTToken();
+    public function getSavedChannels(IUser $user, bool $unlock = true): array;
+    public function getDefaultChannels(IUser $user): array;
+    public function getChannels(?array $filter = []): array;
+    
+    public function setUser(IUser $user): ITattler;
+    
+    public function broadcast(): ITattler;
+    public function room(IChannel $room): ITattler;
+    public function user(IUser $user): ITattler;
 
-    /**
-     * @param IUser $user
-     * @param bool  $unlock
-     * @return IChannel[]|[]
-     */
-    public function getSavedChannels(IUser $user, $unlock = true);
-
-    /**
-     * @param IUser $user
-     * @return string[]
-     */
-    public function getDefaultChannels(IUser $user);
-
-    /**
-     * @param array $filter
-     * @return string[]|[]
-     */
-    public function getChannels($filter = []);
-
-    /**
-     * @param IUser $user
-     * @return static
-     */
-    public function setUser(IUser $user);
-
-    /**
-     * @return static
-     */
-    public function broadcast();
-
-    /**
-     * @param IChannel $room
-     * @return static
-     */
-    public function room(IChannel $room);
-
-    /**
-     * @param IUser $user
-     * @return static
-     */
-    public function user(IUser $user);
-
-
-    /**
-     * @param ITattlerMessage $message
-     * @return static
-     */
-    public function message(ITattlerMessage $message);
-
-    /**
-     * @return bool
-     */
-    public function say();
+    public function message(ITattlerMessage $message): ITattler;
+    
+    public function say(): bool;
 }

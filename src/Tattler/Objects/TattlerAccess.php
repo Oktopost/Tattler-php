@@ -1,4 +1,5 @@
-<?php namespace Tattler\Objects;
+<?php 
+namespace Tattler\Objects;
 
 
 use Objection\LiteObject;

@@ -13,18 +13,14 @@ use Squid\Object\IObjectConnector;
  */
 class SquidDecorator implements IDBDecorator
 {
-    /** @var IObjectConnector $db */
+    /** @var IObjectConnector */
     private $db;
 
-    /** @var string $tableName */
+    /** @var string */
     private $tableName;
 
 
-    /**
-     * @param TattlerAccess $access
-     * @return array
-     */
-    private function getAccessFields(TattlerAccess $access)
+    private function getAccessFields(TattlerAccess $access): array
     {
         return [
             'UserToken' => $access->UserToken,
@@ -33,64 +29,36 @@ class SquidDecorator implements IDBDecorator
     }
 
 
-    /**
-     * SquidConnector constructor.
-     * @param IObjectConnector $connector
-     * @param string           $tableName
-     */
-    public function __construct(IObjectConnector $connector, $tableName)
+    public function __construct(IObjectConnector $connector, string $tableName)
     {
         $this->db = $connector;
         $this->tableName = $tableName;
     }
 
 
-    /**
-     * @param TattlerAccess $access
-     * @param  int          $ttl
-     * @return bool
-     */
-    public function insertAccess(TattlerAccess $access, $ttl)
+    public function insertAccess(TattlerAccess $access, int $ttl): bool
     {
         return $this->db->insert($access);
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @param int           $newTTL
-     * @return mixed
-     */
-    public function updateAccessTTL(TattlerAccess $access, $newTTL)
+    public function updateAccessTTL(TattlerAccess $access, int $newTTL): bool
     {
         return $this->db->updateByFields([
             'Modified' => (new \DateTime())->format('Y-m-d H:i:s')
         ], $this->getAccessFields($access));
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function accessExists(TattlerAccess $access)
+    public function accessExists(TattlerAccess $access): bool
     {
         return $this->db->loadOneByFields($this->getAccessFields($access)) != false;
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function deleteAccess(TattlerAccess $access)
+    public function deleteAccess(TattlerAccess $access): bool
     {
         return $this->db->deleteByFields($this->getAccessFields($access));
     }
 
-    /**
-     * @param string $userToken
-     * @param bool   $unlock
-     * @return TattlerAccess[]|bool|
-     */
-    public function loadAllChannels($userToken, $unlock = true)
+    public function loadAllChannels(string $userToken, bool $unlock = true): array
     {
     	/** @var TattlerAccess[] $result */
         $result = $this->db->loadAllByFields([
@@ -110,11 +78,7 @@ class SquidDecorator implements IDBDecorator
         return $result;
     }
 
-    /**
-     * @param int $maxTTL
-     * @return bool
-     */
-    public function removeGarbage($maxTTL)
+    public function removeGarbage(int $maxTTL): bool
     {
         $date = (new \DateTime())->modify(-$maxTTL.' seconds');
 
@@ -125,22 +89,14 @@ class SquidDecorator implements IDBDecorator
         ->executeDml();
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function lock(TattlerAccess $access)
+    public function lock(TattlerAccess $access): bool
     {
         return $this->db->updateByFields([
             'IsLocked' => 1
         ], $this->getAccessFields($access));
     }
 
-    /**
-     * @param TattlerAccess $access
-     * @return bool
-     */
-    public function unlock(TattlerAccess $access)
+    public function unlock(TattlerAccess $access): bool
     {
         return $this->db->updateByFields([
             'IsLocked' => 0

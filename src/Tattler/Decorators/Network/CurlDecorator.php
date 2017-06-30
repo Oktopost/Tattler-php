@@ -10,12 +10,7 @@ use Tattler\Base\Decorators\INetworkDecorator;
  */
 class CurlDecorator implements INetworkDecorator
 {
-    /**
-     * @param string $endpoint
-     * @param string $payload
-     * @return mixed
-     */
-    private function getCurl($endpoint, $payload)
+    private function getCurl(string $endpoint, string $payload)
     {
         $ch = curl_init($endpoint);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -33,11 +28,7 @@ class CurlDecorator implements INetworkDecorator
         return $query;
     }
 
-    /**
-     * @param array $tattlerBag
-     * @return bool
-     */
-    public function sendPayload(array $tattlerBag)
+    public function sendPayload(array $tattlerBag): bool
     {
         $query = $this->getCurl($tattlerBag['tattlerUri'], json_encode($tattlerBag['payload']));
 
@@ -51,11 +42,7 @@ class CurlDecorator implements INetworkDecorator
         }
     }
 
-    /**
-     * @param array $tattlerBag
-     * @return array|bool
-     */
-    public function syncChannels(array $tattlerBag)
+    public function syncChannels(array $tattlerBag): ?array
     {
         $query = $this->getCurl($tattlerBag['tattlerUri'], json_encode($tattlerBag['payload']));
 
@@ -65,7 +52,7 @@ class CurlDecorator implements INetworkDecorator
         }
         catch (\Exception $e)
         {
-            return false;
+            return null;
         }
     }
 }

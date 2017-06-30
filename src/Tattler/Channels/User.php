@@ -2,9 +2,11 @@
 namespace Tattler\Channels;
 
 
+use Tattler\Base\Channels\IUser;
+use Tattler\Base\Channels\IChannel;
+
 use Closure;
 use Ramsey\Uuid\Uuid;
-use Tattler\Base\Channels\IUser;
 
 
 /**
@@ -43,75 +45,45 @@ class User implements IUser
     }
 
 
-    /**
-     * @param Closure $callback
-     * @return static
-     */
-    public function setNameConverter(Closure $callback)
+    public function setNameConverter(Closure $callback): IUser
     {
         $this->nameConverter = $callback;
         return $this;
     }
 
-    /**
-     * @param array $channelNameArgs
-     * @return static
-     */
-    public function setName(...$channelNameArgs)
+    public function setName(...$channelNameArgs): IChannel
     {
         $this->name = call_user_func_array($this->nameConverter, $channelNameArgs);
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function allow(IUser $user)
+    public function allow(IUser $user): bool
     {
         return $this->getName() == $user->getName();
     }
 
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function deny(IUser $user)
+    public function deny(IUser $user): bool
     {
         return $this->getName() != $user->getName();
     }
 
-    /**
-     * @param IUser $user
-     * @return bool
-     */
-    public function isAllowed(IUser $user)
+    public function isAllowed(IUser $user): bool
     {
         return $this->allow($user);
     }
 
-    /**
-     * @param string $socketId
-     * @return static
-     */
-    public function setSocketId($socketId)
+    public function setSocketId($socketId): IUser
     {
         $this->socketId = $socketId;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSocketId()
+    public function getSocketId(): ?string
     {
         if (!$this->socketId)
         {
