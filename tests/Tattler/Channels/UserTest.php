@@ -1,16 +1,13 @@
 <?php namespace Tests\Tattler\Channels;
 
 
-use Tattler\Base\Channels\IChannel;
+use PHPUnit\Framework\TestCase;
+
 use Tattler\Base\Channels\IUser;
-
-use PHPUnit_Framework_TestCase;
-
-
-require_once __DIR__ .'/../config.php';
+use Tattler\Base\Channels\IChannel;
 
 
-class UserTest extends PHPUnit_Framework_TestCase
+class UserTest extends TestCase
 {
 	/** @var IUser $user */
 	private $user;

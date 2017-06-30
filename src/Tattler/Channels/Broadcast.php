@@ -13,9 +13,12 @@ use Tattler\Base\Channels\IUser;
 class Broadcast implements IChannel
 {
     const BROADCAST_NAME = 'broadcast';
-
-
-    public function setName(...$channelNameArgs): IChannel
+	
+	
+	/**
+	 * @return static
+	 */
+    public function setName(...$channelNameArgs)
     {
         return $this;
     }

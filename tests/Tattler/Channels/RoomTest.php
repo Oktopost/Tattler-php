@@ -2,16 +2,13 @@
 namespace Tests\Tattler\Channels;
 
 
+use PHPUnit\Framework\TestCase;
+
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\Channels\IChannel;
 
-use PHPUnit_Framework_TestCase;
 
-
-require_once __DIR__ .'/../config.php';
-
-
-class RoomTest extends PHPUnit_Framework_TestCase
+class RoomTest extends TestCase
 {
     private $roomName;
     

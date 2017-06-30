@@ -10,9 +10,6 @@ use Tattler\Base\Decorators\INetworkDecorator;
 use Skeleton\Type;
 
 
-require_once __DIR__ . '/../../vendor/autoload.php';
-
-
 SkeletonInit::skeleton()->set(IDBDecorator::class, Tests\Tattler\Decorators\DB\DummyDecorator::class, Type::Singleton);
 SkeletonInit::skeleton()->set(INetworkDecorator::class, Tests\Tattler\Decorators\Network\DummyDecorator::class);
 

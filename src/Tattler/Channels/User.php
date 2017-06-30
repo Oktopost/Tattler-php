@@ -3,7 +3,6 @@ namespace Tattler\Channels;
 
 
 use Tattler\Base\Channels\IUser;
-use Tattler\Base\Channels\IChannel;
 
 use Closure;
 use Ramsey\Uuid\Uuid;
@@ -50,8 +49,11 @@ class User implements IUser
         $this->nameConverter = $callback;
         return $this;
     }
-
-    public function setName(...$channelNameArgs): IChannel
+	
+	/**
+	 * @return static
+	 */
+    public function setName(...$channelNameArgs)
     {
         $this->name = call_user_func_array($this->nameConverter, $channelNameArgs);
         return $this;

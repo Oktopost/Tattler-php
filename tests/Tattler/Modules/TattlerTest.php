@@ -1,4 +1,5 @@
-<?php namespace Tests\Tattler\Modules;
+<?php
+namespace Tests\Tattler\Modules;
 
 
 use Tattler\SkeletonInit;
@@ -9,13 +10,10 @@ use Tattler\Base\Modules\ITattler;
 use Tattler\Base\Channels\IChannel;
 use Tattler\Base\Objects\ITattlerMessage;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 
-require_once __DIR__ . '/../config.php';
-
-
-class TattlerTest extends PHPUnit_Framework_TestCase
+class TattlerTest extends TestCase
 {
 	/** @var ITattler $tattler */
 	private $tattler;

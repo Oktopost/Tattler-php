@@ -4,7 +4,6 @@ namespace Tattler\Channels;
 
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\Channels\IUser;
-use Tattler\Base\Channels\IChannel;
 
 use Tattler\Objects\TattlerAccess;
 
@@ -36,9 +35,12 @@ class Room implements IRoom
 
         return $access;
     }
-
-
-    public function setName(...$channelNameArgs): IChannel
+	
+    
+	/**
+	 * @return static
+	 */
+    public function setName(...$channelNameArgs)
     {
         $this->name = implode(':', $channelNameArgs);
         return $this;
