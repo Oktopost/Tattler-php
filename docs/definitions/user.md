@@ -15,3 +15,4 @@ $user->setSocketId($socketId);
 $tattler->setUser($user);
 ```
 
+**It is really important to define current user. As long as you want to send different messages to different users**
