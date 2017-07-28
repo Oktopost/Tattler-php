@@ -3,7 +3,6 @@
 * Configuration
 * * [Set DB decorator](configuration/db.md)
 * * [Set network decorator](configuration/network.md)
-* * [Create TattlerConfig instance](configuration/instance.md) 
 * * [Initializing tattler.js](configuration/js.md)
 
 * Definitions
