@@ -48,7 +48,7 @@ _note: for using redis db decorator you need to install [predis](https://github.
 Then create TattlerController available from your website. See example in [DummyControllerExample](https://github.com/Oktopost/Tattler-php/blob/master/controller/DummyControllerExample.php)  
 _note: all methods from that controller should response with JSON body_
 
-When php configuration is done, include js/tattler.min.js to your html and initialize tattler
+When php configuration is done, include [js/tattler.min.js](js/tattler.min.js) to your html and initialize tattler
 ```javascript
 window.tattler = tattlerFactory.create({
     urls: {
