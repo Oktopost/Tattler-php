@@ -10,7 +10,8 @@ _note: existing decorators may contain undocumented features. They will be added
 Or they will be removed from code. Who knows._
 
 ## Redis
-This is the most simple way to store tattler-stuff.
+This is the most simple way to store tattler-stuff. Install [Predis library](https://github.com/nrk/predis) and 
+start using decorator.
 
 ```php
 $host = 'localhost';
