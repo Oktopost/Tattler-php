@@ -71,4 +71,4 @@ $message->setHandler('myMessage')->setNamespace('globalNamespace')->setPayload([
 $tattler->message($message)->broadcast()->say();
 ```
 
-See more examples in [docs](docs/README.md)
+See more docs in [docs/](docs/README.md)
