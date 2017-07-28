@@ -31,4 +31,9 @@ $prepared->room($room1)->room($room2)->say();
 $prepared->broadcast()->say();
 ```
 
-After calling `say()` method all targets (users and room) and message will be removed from `$tattler`. 
+Also you can do ti in one line
+```php
+$tattler->message($message)->room($room)->say();
+```
+
+After calling `say()` method all targets (users and rooms) and message will be removed from `$tattler`. 
