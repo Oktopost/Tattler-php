@@ -1,7 +1,7 @@
 # Tattler.js
 
-First you need to include tattler.min.js to your html.
-Then you need to create `setting` object. By default tattler will use settings below
+First you need to include [tattler.min.js](https://github.com/Oktopost/Tattler-php/blob/master/js/tattler.min.js) to your html.
+Then you need to create `settings` object. By default tattler will use settings below
 ```javascript
 var settings = {
     urls: {
