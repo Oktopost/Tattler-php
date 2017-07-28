@@ -4,6 +4,8 @@
 
 Send async messages to your users using [Tattler](https://github.com/grohman/tattler)
 
+- [Simple example project](https://github.com/grohman/tattler-php-chat-example)
+
 ## Installation
 
 ```bash
