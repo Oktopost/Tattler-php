@@ -46,6 +46,7 @@ _note: for using redis db decorator you need to install [predis](https://github.
 * USER_TOKEN_TTL - time in seconds for users auth tokens used with tattler-server
 
 Then create TattlerController available from your website. See example in [DummyControllerExample](https://github.com/Oktopost/Tattler-php/blob/master/controller/DummyControllerExample.php)
+
 _note: all methods from that controller should response with JSON body_
 
 When php configuration is done, include js/tattler.min.js to your html and initialize tattler
