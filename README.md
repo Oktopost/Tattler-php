@@ -1,6 +1,7 @@
 # Tattler PHP client
 
 [![Build Status](https://travis-ci.org/Oktopost/Tattler-php.svg)](https://travis-ci.org/Oktopost/Tattler-php)
+[![Coverage Status](https://coveralls.io/repos/github/Oktopost/Tattler-php/badge.svg)](https://coveralls.io/github/Oktopost/Tattler-php)
 
 Send async messages to your users using [Tattler](https://github.com/grohman/tattler)
 
