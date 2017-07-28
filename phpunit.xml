@@ -1,13 +1,19 @@
 <phpunit bootstrap="tests/boot.php">
-    <testsuites>
-        <testsuite name="AllTests">
-            <directory>./tests</directory>
-        </testsuite>
-    </testsuites>
-
     <filter>
-        <whitelist>
-            <directory suffix=".php">./src</directory>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src/</directory>
+            <exclude>
+                <directory>./src/Tattler/Decorators/</directory>
+                <file>./src/Tattler/SkeletonInit.php</file>
+            </exclude>
         </whitelist>
     </filter>
+    <testsuites>
+        <testsuite name="AllTests">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
 </phpunit>

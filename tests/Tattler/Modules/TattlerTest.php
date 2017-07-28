@@ -37,7 +37,10 @@ class TattlerTest extends TestCase
 	{
 		/** @var ITattlerMessage $message */
 		$message = SkeletonInit::skeleton(ITattlerMessage::class);
-		$message->setPayload(['some', 'random', 'data']);
+		$message
+			->setHandler('handler')
+			->setNamespace('global')
+			->setPayload(['some', 'random', 'data']);
 		
 		return $message;
 	}
@@ -172,5 +175,20 @@ class TattlerTest extends TestCase
 		$this->tattler->broadcast()->message($this->getDummyMessage());
 		
 		self::assertTrue($this->tattler->say());
+	}
+	
+	public function test_MessageAlwaysContainsDefaultNamespace()
+	{
+		$message = $this->getDummyMessage();
+		$message->setNamespace(null);
+		$array = $message->toArray();
+		self::assertSame($array['namespace'], ITattlerMessage::DEFAULT_NAMESPACE);
+	}
+	
+	public function test_getTokenReturnString()
+	{
+		$result = $this->tattler->getJWTToken();
+		self::assertTrue(is_string($result));
+		self::assertNotEmpty($result);
 	}
 }

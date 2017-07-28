@@ -7,7 +7,8 @@
 		"00f100/uuid": "4.0.0",
 		"oktopost/objection": "^1.0",
 		"oktopost/skeleton": "^1.0.10",
-		"firebase/php-jwt": "^4.0"
+		"firebase/php-jwt": "^4.0",
+		"satooshi/php-coveralls": "^1.0"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^6.2",
@@ -42,7 +43,8 @@
 		}
 	},
 	"scripts": {
-		"test": "./vendor/bin/phpunit"
+		"test": "./vendor/bin/phpunit",
+		"test-cover": "./vendor/phpunit/phpunit/phpunit --coverage-html ./build/cover"
 	},
 	"suggest": {
 		"oktopost/squanch": "Store users/channels tokens with Squanch client",

@@ -1,4 +1,20 @@
-.idea
-vendor
-node_modules
+# IDE Folders
+/.buildpath
+/.project
+/.settings
+/.idea
+
+# OS Folders
+.DS_Store
+
+# Composer
+/vendor/
+
+#node
+/node_modules/
+
+# Build folders
+/build
+
+# Test objects
 test.php
