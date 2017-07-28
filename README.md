@@ -37,7 +37,7 @@ $tattlerConfig->fromArray([
 $tattler = \Tattler\SkeletonInit::skeleton(ITattler::class);
 $tattler->setConfig($tattlerConfig);
 ```
-_note: for using redis db decorator you need to install <https://github.com/nrk/predis>_
+_note: for using redis db decorator you need to install [predis](https://github.com/nrk/predis)_
 
 * TATTLER_WEBSOCKET_ADDRESS - websocket transport address e.g. ws://websocket.domain.tld:80 or wss://websocket.domain.tld:443
 * TATTLER_API_ADDRESS - api address e.g. http://websocket.domain.tld:80 or https://websocket.domain.tld:443
@@ -45,8 +45,8 @@ _note: for using redis db decorator you need to install <https://github.com/nrk/
 * TATTLER_SECRET - same secret that was defined in tattler-server configuration
 * USER_TOKEN_TTL - time in seconds for users auth tokens used with tattler-server
 
-Then create TattlerController available from your website. See example in <https://github.com/Oktopost/Tattler-php/blob/master/controller/DummyControllerExample.php>
-_note: all methods from that controller should response with JSON body
+Then create TattlerController available from your website. See example in [DummyControllerExample](https://github.com/Oktopost/Tattler-php/blob/master/controller/DummyControllerExample.php)
+_note: all methods from that controller should response with JSON body_
 
 When php configuration is done, include js/tattler.min.js to your html and initialize tattler
 ```javascript
