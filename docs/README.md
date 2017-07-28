@@ -7,7 +7,7 @@
 * * [Initializing tattler.js](configuration/js.md)
 
 * Definitions
-* * [Current user](definitions/user.md)
+* * [User](definitions/user.md)
 * * [Room](definitions/room.md)
 * * [Broadcast](definitions/broadcast.md)
 * * [Message](definitions/message.md)

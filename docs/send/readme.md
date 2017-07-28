@@ -31,9 +31,10 @@ $prepared->room($room1)->room($room2)->say();
 $prepared->broadcast()->say();
 ```
 
-Also you can do ti in one line
+Also you can do it in one line
 ```php
 $tattler->message($message)->room($room)->say();
 ```
 
-After calling `say()` method all targets (users and rooms) and message will be removed from `$tattler`. 
+After calling `say()` method all targets (users and rooms) and message will be removed from `$tattler`,
+so you can use same instance for sending another message somewhere.

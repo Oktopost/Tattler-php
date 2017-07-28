@@ -12,13 +12,13 @@ $message->setHandler($handler)->setNamespace($namespace)->setPayload($payload);
 ```
 
 `$handler` and `$namespace` will allow javascript code to understand how to process your payload.
-You can have same handler name within multiple namespaces, that will allow you to treat same payload differently.
 E.g.:
 ```javascript
 window.tattler.addHandler('consoleEcho', 'secretNamespace', function(data) {
 	console.log(data);
 });
 ```
+You can have same handler defined within multiple namespaces, that will allow you to treat same payload differently.
 
 By default tattler.js contains several predefined handlers:
 * 'console.log' for echoing payloads to browser's console
