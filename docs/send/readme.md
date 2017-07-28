@@ -2,7 +2,7 @@
  
 First prepare tattler instance for sending message
 ```php
-$prepared = $tattler->setMessage($message);
+$prepared = $tattler->message($message);
 ``` 
 
 ## send to single user
