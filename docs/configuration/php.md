@@ -24,7 +24,7 @@ $tattler->setConfig($tattlerConfig);
 * USER_TOKEN_TTL - time in seconds for users auth tokens used with tattler-server
 ```
 
-Then create php file available from our website. 
+Then create php file available from your website. 
 By default Tattler will try to work with route `/_tattler` (i.e. `/_tattler/ws`, `/_tattler/auth`, etc.).
 You can change this by settings js configuration (see [Initializing tattler.js](js.md))  
 _note: See example in [DummyControllerExample](https://github.com/Oktopost/Tattler-php/blob/master/controller/DummyControllerExample.php)_
