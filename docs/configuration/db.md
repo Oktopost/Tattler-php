@@ -6,6 +6,8 @@ There are several types of storage, you can use any of them or implement your ow
 
 _note: class should implement [IDBDecorator interface](https://github.com/Oktopost/Tattler-php/blob/master/src/Tattler/Base/Decorators/IDBDecorator.php)_
 
+_note: If DB decorator is not configured, `Redis` decorator [will be used automatically](https://github.com/Oktopost/Tattler-php/blob/master/skeleton/Tattler/Base/Decorators.php)_
+
 _note: existing decorators may contain undocumented features. They will be added to documentation later. 
 Or they will be removed from code. Who knows._
 
