@@ -14,7 +14,7 @@ var settings = {
         channels: 'get', // get or post
         auth: 'get' // get or post
     },
-    readyCallback: false, // will be called each time user is connected to socket
+    readyCallback: false, // will be called each time user is connected or reconnected to socket
     readyCallbackOnce: false, // will be called after first time user is connected to socket
     autoConnect: true, // automatically init plugin
     debug: false // show messages in console
