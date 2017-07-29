@@ -3,6 +3,7 @@
 * Configuration
 * * [Set DB decorator](configuration/db.md)
 * * [Set network decorator](configuration/network.md)
+* * [Initializing tattler php](configuration/php.md)
 * * [Initializing tattler.js](configuration/js.md)
 
 * Definitions

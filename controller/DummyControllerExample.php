@@ -17,16 +17,19 @@ class DummyControllerExample
 	private $tattler;
 	
 	
-	public function __construct()
+	private function addUserToPrivateRoom(IUser $user): void
 	{
-		$this->tattler = SkeletonInit::skeleton(ITattler::class);
-		$config = new TattlerConfig();
-//		$config->WsAddress = 'wss://domain.tld/...';
-//      $config->ApiAddress = 'https://domain.tld/...';
-//		$config->...
-		$this->tattler->setConfig($config);
+		/** @var IRoom $newRoom */
+		$newRoom = SkeletonInit::skeleton(IRoom::class);
+		$newRoom->setName('privateRoom')->allow($user);
 	}
 	
+	
+	public function __construct()
+	{
+		// Tattler should be already configured by this moment
+		$this->tattler = SkeletonInit::skeleton(ITattler::class);
+	}
 	
 	/**
 	 * @return array
@@ -36,13 +39,11 @@ class DummyControllerExample
 		return ['ws' => $this->tattler->getWsAddress()];
 	}
 	
+	
 	public function getAuth()
 	{
-		return [
-			'token' => $this->tattler->getJWTToken()
-		];
+		return ['token' => $this->tattler->getJWTToken()];
 	}
-	
 	
 	/**
 	 * @param string $socketId
@@ -53,14 +54,13 @@ class DummyControllerExample
 	{
 		/** @var IUser $user */
 		$user = SkeletonInit::skeleton(IUser::class);
-		$user->setName('current', 'user', 'name', 'with', 'any', 'args')
+		$user
+			->setName('current', 'user', 'name', 'with', 'any', 'args')
 			->setSocketId($socketId);
 		
 		$this->tattler->setUser($user);
 		
-		/** @var IRoom $newRoom */
-		$newRoom = SkeletonInit::skeleton(IRoom::class);
-		$newRoom->setName('newRoom')->allow($user);
+		$this->addUserToPrivateRoom($user);
 		
 		return ['channels' => $this->tattler->getChannels($channels)];
 	}
