@@ -2,7 +2,7 @@
 
 Tattler storage used for storing users and rooms and synchronization with tattler backend.
 
-There is several types of storage, you can use any of them or implement your own.
+There are several types of storage, you can use any of them or implement your own.
 
 _note: class should implement [IDBDecorator interface](https://github.com/Oktopost/Tattler-php/blob/master/src/Tattler/Base/Decorators/IDBDecorator.php)_
 

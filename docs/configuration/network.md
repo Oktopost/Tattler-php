@@ -2,7 +2,7 @@
 
 Tattler uses network for sending socketIds and payloads to tattler-backend.
 
-There is several types of network decorators. You can use any of them or implement your own.
+There are several types of network decorators. You can use any of them or implement your own.
 Also there is no big difference between them, just use any of them that looks more appropriate to you. 
 
 _note: class should implement [INetworkDecorator interface](https://github.com/Oktopost/Tattler-php/blob/master/src/Tattler/Base/Decorators/INetworkDecorator.php)_
