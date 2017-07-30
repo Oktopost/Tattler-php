@@ -26,5 +26,5 @@ $tattler->setConfig($tattlerConfig);
 
 Then create php file available from your website. 
 By default Tattler will try to work with route `/_tattler` (i.e. `/_tattler/ws`, `/_tattler/auth`, etc.).
-You can change this by settings js configuration (see [Initializing tattler.js](js.md))  
+You can change this in js configuration (see [Initializing tattler.js](js.md))  
 _note: See example in [DummyControllerExample](https://github.com/Oktopost/Tattler-php/blob/master/controller/DummyControllerExample.php)_
