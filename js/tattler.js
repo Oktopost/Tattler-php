@@ -280,6 +280,11 @@
 				if (manufactory.socket !== null) {
 					log('info', 'joining channel «' + channel + '»');
 					manufactory.socket.emit('subscribe', channel);
+					
+					if (typeof state === 'undefined')
+					{
+						manufactory.channels[channel] = true;
+					}
 				} else {
 					log('info', 'adding channel «' + channel + '»');
 				}
