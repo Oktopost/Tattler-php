@@ -95,6 +95,8 @@
 		}
 
 		xmlhttp.open(type, url, true);
+		xmlhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		
 		return xmlhttp.send(data);
 	}
 
