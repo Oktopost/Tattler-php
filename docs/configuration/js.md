@@ -25,3 +25,13 @@ Then you can initialize tattler instance from tattlerFactory
 ```javascript
 window.tattler = tattlerFactory.create(settings);
 ```
+
+To add connection to room use code below
+```javascript
+window.tattler.addChannel('roomName');
+```
+
+To remove connection to room use code below
+```javascript
+window.tattler.removeChannel('roomName');
+```

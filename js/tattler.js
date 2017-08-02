@@ -107,15 +107,6 @@
 		return JSON.stringify(obj) === JSON.stringify({});
 	}
 
-	function parseURI(str) {
-		var match = str.match(/^(wss?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
-		return match && {
-				protocol: match[1],
-				hostname: match[3],
-				port: match[4]
-			}
-	}
-
 	var tattlerFactory = {
 		getInstance: function (instanceName) {
 			return tattlerInstances[instanceName];
@@ -430,6 +421,7 @@
 		this.debug = debug;
 		this.addHandler = addHandler;
 		this.addChannel = addChannel;
+		this.removeChannel = removeChannel;
 		this.run = init;
 	};
 
