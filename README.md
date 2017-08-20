@@ -53,7 +53,7 @@ _note: all methods from that controller should response with JSON body_
 
 When php configuration is done, include [js/tattler.min.js](js/tattler.min.js) to your html and initialize tattler
 ```javascript
-window.tattler = tattlerFactory.create();
+window.tattler = TattlerFactory.create();
 ```
 
 ## Usage

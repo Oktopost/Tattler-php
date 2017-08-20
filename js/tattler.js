@@ -475,4 +475,15 @@
 	};
 
 	window.TattlerFactory = TattlerFactory;
+	
+	window.tattlerFactory = {
+		getInstance: function (instanceName) {
+			console.warn('tattlerFactory is deprecated, use TattlerFactory');
+			return TattlerFactory.getInstance(instanceName);
+		},
+		create: function (config) {
+			console.warn('tattlerFactory is deprecated, use TattlerFactory');
+			return TattlerFactory.create(config);
+		}
+	};
 })();
