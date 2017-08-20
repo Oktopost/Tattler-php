@@ -191,4 +191,14 @@ class TattlerTest extends TestCase
 		self::assertTrue(is_string($result));
 		self::assertNotEmpty($result);
 	}
+	
+	public function test_SetConfigValueReturnTrue()
+	{
+		self::assertTrue($this->tattler->setConfigValue('Namespace', 'Test2'));
+	}
+	
+	public function test_SetConfigValueReturnFalse()
+	{
+		self::assertFalse($this->tattler->setConfigValue('fake', 'Test'));
+	}
 }

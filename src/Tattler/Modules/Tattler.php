@@ -81,6 +81,23 @@ class Tattler implements ITattler
 		return $this;
 	}
 	
+	public function setConfigValue(string $key, string $value): bool
+	{
+		if (!isset(self::$config->{$key}))
+		{
+			return false;
+		}
+	
+		self::$config->{$key} = $value;
+		
+		return true;
+	}
+	
+	public function getConfig()
+	{
+		return self::$config;
+	}
+	
 	public function getWsAddress(): string
 	{
 		return self::$config->WsAddress;
