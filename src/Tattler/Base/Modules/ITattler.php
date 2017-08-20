@@ -22,7 +22,7 @@ interface ITattler
 
 
     public function setConfig(TattlerConfig $config): ITattler;
-    public function setConfigValue(string $key, string $value): bool;
+    public function setConfigValue(string $key, $value): bool;
     public function getWsAddress(): string;
     public function getJWTToken(): string;
 	

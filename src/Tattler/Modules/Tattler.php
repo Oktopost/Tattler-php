@@ -81,7 +81,7 @@ class Tattler implements ITattler
 		return $this;
 	}
 	
-	public function setConfigValue(string $key, string $value): bool
+	public function setConfigValue(string $key, $value): bool
 	{
 		if (!isset(self::$config->{$key}))
 		{
