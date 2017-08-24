@@ -139,10 +139,7 @@ class Tattler implements ITattler
 		
 		if ($filter)
 		{
-			return array_unique(array_merge(
-				$this->getDefaultChannels($this->currentUser),
-				array_values(array_intersect($result, $filter))
-			));
+			return array_unique(array_values(array_intersect($result, $filter)));
 		}
 		
 		return $result;

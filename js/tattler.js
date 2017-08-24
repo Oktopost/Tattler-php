@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 	
-
+	
 	var defaults = {
 		ws: undefined,
 		auth: undefined,
@@ -143,7 +143,7 @@
 				onSuccess: function (data) {
 					for (var i in data.channels) {
 						if (data.channels.hasOwnProperty(i)) {
-							addChannel(data.channels[i], true);
+							addChannel(data.channels[i], true, true);
 						}
 					}
 					callbacks.socket.handleEvents();
@@ -279,18 +279,44 @@
 			typeof manufactory.handlers[namespace][event] !== 'undefined';
 		};
 		
-		var addChannel = function (channel, state) {
+		var subscribeChannel = function (channel, state) {
+			manufactory.socket.emit('subscribe', channel);
+			
+			if (typeof state === 'undefined')
+			{
+				manufactory.channels[channel] = true;
+			}
+		};
+		
+		var addChannel = function (channel, state, notAsync) {
 			if (typeof manufactory.channels[channel] === 'undefined' || manufactory.channels[channel] !== state) {
 				manufactory.channels[channel] = state;
 				
 				if (manufactory.socket !== null) {
 					log('info', 'joining channel «' + channel + '»');
-					manufactory.socket.emit('subscribe', channel);
 					
-					if (typeof state === 'undefined')
+					if (typeof notAsync === 'boolean' && notAsync === true)
 					{
-						manufactory.channels[channel] = true;
+						subscribeChannel(channel, state);
 					}
+					else
+					{
+						ajax(settings.requests.channels,
+						settings.urls.channels,
+						{
+							socketId: manufactory.socket.id,
+							channels: [channel]
+						},
+						function (data) {
+							for (var i in data.channels) {
+								if (data.channels.hasOwnProperty(i)) {
+									subscribeChannel(data.channels[i], state);
+								}
+							}
+						},
+						callbacks.getChannels.onError);
+					}
+					
 				} else {
 					log('info', 'adding channel «' + channel + '»');
 				}
@@ -324,8 +350,8 @@
 				manufactory.handlers[namespace][event] = fn;
 				
 				log('info', 'added handler for event «' + event + '» in namespace «' + namespace + '»');
-			} 
-			else 
+			}
+			else
 			{
 				log('warn', 'failed to create for event «' + event + '» in «' + namespace + '»: already exists.');
 				
@@ -473,7 +499,7 @@
 		this.removeChannel = removeChannel;
 		this.run = init;
 	};
-
+	
 	window.TattlerFactory = TattlerFactory;
 	
 	window.tattlerFactory = {
