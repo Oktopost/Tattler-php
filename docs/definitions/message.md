@@ -7,7 +7,7 @@ $namespace='secretNamespace';
 $payload=['anything', 'you' => ['want'], ['to' => 'send']];
 
 /** var ITattlerMessage::class $message */
-$message = \Tattler\SkeletonInit::skeleton(ITattlerMessage::class);
+$message = new TattlerMessage();
 $message->setHandler($handler)->setNamespace($namespace)->setPayload($payload);
 ```
 

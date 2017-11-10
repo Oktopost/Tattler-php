@@ -3,15 +3,11 @@ namespace Tattler;
 
 
 use Skeleton\Skeleton;
-use Skeleton\Base\ISkeletonInit;
 use Skeleton\ConfigLoader\DirectoryConfigLoader;
 
 
-class SkeletonInit implements ISkeletonInit
+class TattlerScope
 {
-	private const CONFIG_PATH = __DIR__ . '/../../skeleton';
-	
-	
 	/** @var Skeleton */
 	private static $skeleton = null;
 	
@@ -24,7 +20,7 @@ class SkeletonInit implements ISkeletonInit
 			->enableKnot()
 			->registerGlobalFor(__NAMESPACE__)
 			->setConfigLoader(
-				new DirectoryConfigLoader(realpath(self::CONFIG_PATH))
+				new DirectoryConfigLoader(realpath(__DIR__ . '/../../skeleton'))
 			);
 	}
 	

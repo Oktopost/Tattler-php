@@ -9,12 +9,12 @@ use Tattler\Base\Decorators\IDBDecorator;
 class DummyDecorator implements IDBDecorator
 {
 
-    private $accessStorage = [];
+    private static $accessStorage = [];
 
     
     public function insertAccess(TattlerAccess $access, int $ttl): bool
     {
-        $this->accessStorage[] = $access;
+        self::$accessStorage[] = $access;
         return true;
     }
 
@@ -26,7 +26,7 @@ class DummyDecorator implements IDBDecorator
     public function accessExists(TattlerAccess $access): bool
     {
         /** @var TattlerAccess $item */
-        foreach ($this->accessStorage as $item)
+        foreach (self::$accessStorage as $item)
         {
             if ($item->Channel == $access->Channel && $item->UserToken == $access->UserToken)
             {
@@ -40,11 +40,11 @@ class DummyDecorator implements IDBDecorator
     public function deleteAccess(TattlerAccess $access): bool
     {
         /** @var TattlerAccess $item */
-        foreach ($this->accessStorage as $key => $item)
+        foreach (self::$accessStorage as $key => $item)
         {
             if ($item->Channel == $access->Channel && $item->UserToken == $access->UserToken)
             {
-                unset($this->accessStorage[$key]);
+                unset(self::$accessStorage[$key]);
                 return true;
             }
         }
@@ -57,7 +57,7 @@ class DummyDecorator implements IDBDecorator
         $result = [];
 
         /** @var TattlerAccess $item */
-        foreach ($this->accessStorage as $item)
+        foreach (self::$accessStorage as $item)
         {
             if ($item->UserToken == $userToken)
             {
@@ -71,7 +71,7 @@ class DummyDecorator implements IDBDecorator
     public function lock(TattlerAccess $access): bool
     {
     	/** @var TattlerAccess $item */
-	    foreach($this->accessStorage as $item)
+	    foreach(self::$accessStorage as $item)
 	    {
 		    if ($item->Channel == $access->Channel && $item->UserToken == $access->UserToken)
 		    {
@@ -86,7 +86,7 @@ class DummyDecorator implements IDBDecorator
     public function unlock(TattlerAccess $access): bool
     {
 	    /** @var TattlerAccess $item */
-	    foreach($this->accessStorage as $item)
+	    foreach(self::$accessStorage as $item)
 	    {
 		    if ($item->Channel == $access->Channel && $item->UserToken == $access->UserToken)
 		    {

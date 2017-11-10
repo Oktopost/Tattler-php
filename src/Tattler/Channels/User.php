@@ -4,19 +4,15 @@ namespace Tattler\Channels;
 
 use Tattler\Base\Channels\IUser;
 
-use Closure;
 use Ramsey\Uuid\Uuid;
 
 
-/**
- * Class User
- */
 class User implements IUser
 {
     /** @var string $name */
     private $name;
 
-    /** @var Closure $nameConverter */
+    /** @var \Closure $nameConverter */
     private $nameConverter;
 
     /** @var string $socketId */
@@ -24,7 +20,7 @@ class User implements IUser
 
 
     /**
-     * @return Closure
+     * @return \Closure
      */
     private function setDefaultConverter()
     {
@@ -44,7 +40,7 @@ class User implements IUser
     }
 
 
-    public function setNameConverter(Closure $callback): IUser
+    public function setNameConverter(\Closure $callback): IUser
     {
         $this->nameConverter = $callback;
         return $this;
@@ -61,22 +57,17 @@ class User implements IUser
 
     public function getName(): string
     {
+    	if (!$this->name && $this->socketId)
+		{
+			$this->setName($this->socketId);
+		}
+		
+		if (!$this->name)
+		{
+			throw new \Exception('User without name');
+		}
+		
         return $this->name;
-    }
-
-    public function allow(IUser $user): bool
-    {
-        return $this->getName() == $user->getName();
-    }
-
-    public function deny(IUser $user): bool
-    {
-        return $this->getName() != $user->getName();
-    }
-
-    public function isAllowed(IUser $user): bool
-    {
-        return $this->allow($user);
     }
 
     public function setSocketId($socketId): IUser
@@ -85,11 +76,11 @@ class User implements IUser
         return $this;
     }
 
-    public function getSocketId(): ?string
+    public function getSocketId(): string
     {
         if (!$this->socketId)
         {
-            throw new \Exception('SocketId for current user is not defined');
+            throw new \Exception('SocketId for this user is not defined');
         }
 
         return $this->socketId;

@@ -2,33 +2,22 @@
 namespace Tests\Tattler\Modules;
 
 
-use Tattler\SkeletonInit;
-use Tattler\Channels\Broadcast;
+use Tattler\Tattler;
 use Tattler\Base\Channels\IRoom;
-use Tattler\Objects\TattlerConfig;
-use Tattler\Base\Modules\ITattler;
+use Tattler\Base\Modules\ITattlerModule;
 use Tattler\Base\Channels\IChannel;
 use Tattler\Base\Objects\ITattlerMessage;
+use Tattler\Objects\TattlerMessage;
+use Tattler\Channels\Broadcast;
 
 use PHPUnit\Framework\TestCase;
 
 
 class TattlerTest extends TestCase
 {
-	/** @var ITattler $tattler */
+	/** @var ITattlerModule $tattler */
 	private $tattler;
 	
-	
-	private function getConfig()
-	{
-		$result = new TattlerConfig();
-		$result->Namespace = 'Test';
-		$result->WsAddress = 'ws://localhost.domain.tld';
-		$result->ApiAddress = 'http://localhost.domain.tld';
-		$result->Secret = uniqid();
-		
-		return $result;
-	}
 	
 	/**
 	 * @return ITattlerMessage
@@ -36,7 +25,7 @@ class TattlerTest extends TestCase
 	private function getDummyMessage()
 	{
 		/** @var ITattlerMessage $message */
-		$message = SkeletonInit::skeleton(ITattlerMessage::class);
+		$message = new TattlerMessage();
 		$message
 			->setHandler('handler')
 			->setNamespace('global')
@@ -50,14 +39,13 @@ class TattlerTest extends TestCase
 	{
 		parent::setUp();
 		
-		$this->tattler = SkeletonInit::skeleton(ITattler::class);
-		$this->tattler->setConfig($this->getConfig());
+		$this->tattler = Tattler::getInstance(getConfig());
 	}
 	
 	
 	public function test_setConfig_should_return_static()
 	{
-		self::assertInstanceOf(ITattler::class, $this->tattler->setConfig($this->getConfig()));
+		self::assertInstanceOf(ITattlerModule::class, $this->tattler->setConfig(getConfig()));
 	}
 	
 	public function test_getWsAddress_should_return_WS_address()
@@ -76,7 +64,9 @@ class TattlerTest extends TestCase
 	{
 		$user = getDummyUser();
 		$room = getDummyRoom();
-		$room->setName(uniqId())->allow($user);
+		$room->setName(uniqId());
+		
+		$this->tattler->allowAccess($room, $user);
 		
 		$result = $this->tattler->getSavedChannels($user);
 		
@@ -124,9 +114,9 @@ class TattlerTest extends TestCase
 		/** @var IRoom $room2 */
 		$room2 = getDummyRoom()->setName(uniqId());
 		
-		$room->allow($user);
-		$room2->allow($user);
-
+		$this->tattler->allowAccess($room, $user);
+		$this->tattler->allowAccess($room2, $user);
+		
 		$filter = [$room->getName()];
 		$result = $this->tattler->setUser($user)->getChannels($filter);
 
@@ -138,19 +128,19 @@ class TattlerTest extends TestCase
 	
 	public function test_setUser_should_return_static()
 	{
-		self::assertInstanceOf(ITattler::class, $this->tattler->setUser(getDummyUser()));
+		self::assertInstanceOf(ITattlerModule::class, $this->tattler->setUser(getDummyUser()));
 	}
 	
 	public function test_set_broadcast_target_should_return_static()
 	{
-		self::assertInstanceOf(ITattler::class, $this->tattler->broadcast());
+		self::assertInstanceOf(ITattlerModule::class, $this->tattler->broadcast());
 	}
 	
 	public function test_set_room_target_should_return_static()
 	{
 		$room = getDummyRoom();
 		$room->setName(uniqId());
-		self::assertInstanceOf(ITattler::class, $this->tattler->room($room));
+		self::assertInstanceOf(ITattlerModule::class, $this->tattler->room($room));
 	}
 	
 	public function test_set_room_target_without_name_should_throw_exception()
@@ -161,13 +151,13 @@ class TattlerTest extends TestCase
 	
 	public function test_set_user_target_should_return_static()
 	{
-		self::assertInstanceOf(ITattler::class, $this->tattler->user(getDummyUser()));
+		self::assertInstanceOf(ITattlerModule::class, $this->tattler->user(getDummyUser()));
 	}
 	
 	public function test_set_message_should_return_static()
 	{
 		$message = $this->getDummyMessage();		
-		self::assertInstanceOf(ITattler::class, $this->tattler->message($message));
+		self::assertInstanceOf(ITattlerModule::class, $this->tattler->message($message));
 	}
 	
 	public function test_say_should_return_true()

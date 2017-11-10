@@ -8,9 +8,6 @@ use Tattler\Objects\TattlerAccess;
 use Squid\Object\IObjectConnector;
 
 
-/**
- * Class SquidDecorator
- */
 class SquidDecorator implements IDBDecorator
 {
     /** @var IObjectConnector */

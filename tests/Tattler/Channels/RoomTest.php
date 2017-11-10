@@ -6,6 +6,8 @@ use PHPUnit\Framework\TestCase;
 
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\Channels\IChannel;
+use Tattler\Base\Modules\ITattlerModule;
+use Tattler\Tattler;
 
 
 class RoomTest extends TestCase
@@ -15,10 +17,15 @@ class RoomTest extends TestCase
     /** @var IRoom $room */
 	private $room;
 	
+	/** @var ITattlerModule */
+	private $tattler;
+	
+	
 	protected function setUp()
     {
 	    parent::setUp();
-	    
+	 
+	    $this->tattler = Tattler::getInstance(getConfig());
 	    $this->room = getDummyRoom();
 	    $this->roomName = uniqid();
     }
@@ -49,7 +56,8 @@ class RoomTest extends TestCase
 	
 	public function test_should_allow_access_for_specified_user()
 	{
-		self::assertTrue($this->room->setName($this->roomName)->allow(getDummyUser()));
+		$this->room->setName($this->roomName);
+		self::assertTrue($this->tattler->allowAccess($this->room, getDummyUser()));
 	}
 	
 	public function test_allow_twice_should_return_true()
@@ -57,41 +65,37 @@ class RoomTest extends TestCase
 		$room = $this->room->setName($this->roomName);
 		$user = getDummyUser();
 		$user->setSocketId(uniqid());
-		$room->allow($user);
-		$room->lock($user);
 		
-		self::assertTrue($room->allow($user));
+		$this->tattler->allowAccess($room, $user);
+		
+		self::assertTrue($this->tattler->allowAccess($room, $user));
 	}
     
     public function test_deny_should_return_true()
     {
     	$user = getDummyUser();
-    	$this->room->setName($this->roomName)->allow($user);
-    	self::assertTrue($this->room->deny($user));
+    	$this->room->setName($this->roomName);
+    	$this->tattler->allowAccess($this->room, $user);
+    	self::assertTrue($this->tattler->denyAccess($this->room, $user));
     }
     
     public function test_is_allowed_for_unknown_user_should_return_false()
     {
-    	self::assertFalse($this->room->setName(uniqId())->isAllowed(getDummyUser()));
+		$this->room->setName(uniqId());
+    	self::assertFalse($this->tattler->isAllowed($this->room, getDummyUser()));
     }
     
     public function test_for_denying_unknown_user_should_return_true()
     {
-	    self::assertTrue($this->room->setName(uniqId())->deny(getDummyUser()));
+		$this->room->setName(uniqId());
+	    self::assertTrue($this->tattler->denyAccess($this->room, getDummyUser()));
     }
 
     public function test_should_return_isAllowed_for_current_user()
     {
     	$user = getDummyUser();
-	    $this->room->setName($this->roomName)->allow($user);
-        self::assertTrue($this->room->isAllowed($user));
-    }
-    
-    public function test_lock_should_return_true()
-    {
-    	$room = $this->room->setName($this->roomName);
-    	$user = getDummyUser();
-    	$room->allow($user);
-    	self::assertTrue($room->lock($user));
+	    $this->room->setName($this->roomName);
+	    $this->tattler->allowAccess($this->room, $user);
+        self::assertTrue($this->tattler->isAllowed($this->room, $user));
     }
 }

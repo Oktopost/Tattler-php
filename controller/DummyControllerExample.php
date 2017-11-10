@@ -1,11 +1,14 @@
 <?php
+use Tattler\Tattler;
 
-
-use Tattler\SkeletonInit;
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\Channels\IUser;
-use Tattler\Base\Modules\ITattler;
+use Tattler\Base\Modules\ITattlerModule;
+
 use Tattler\Objects\TattlerConfig;
+
+use Tattler\Channels\Room;
+use Tattler\Channels\User;
 
 
 /**
@@ -13,22 +16,23 @@ use Tattler\Objects\TattlerConfig;
  */
 class DummyControllerExample
 {
-	/** @var ITattler $tattler */
+	/** @var ITattlerModule $tattler */
 	private $tattler;
 	
 	
 	private function addUserToPrivateRoom(IUser $user): void
 	{
 		/** @var IRoom $newRoom */
-		$newRoom = SkeletonInit::skeleton(IRoom::class);
-		$newRoom->setName('privateRoom')->allow($user);
+		$newRoom = new Room();
+		$newRoom->setName('privateRoom');
+		$this->tattler->allowAccess($newRoom, $user);
 	}
 	
 	
 	public function __construct()
 	{
-		// Tattler should be already configured by this moment
-		$this->tattler = SkeletonInit::skeleton(ITattler::class);
+		$config = new TattlerConfig();
+		$this->tattler = Tattler::getInstance($config);
 	}
 	
 	/**
@@ -53,7 +57,7 @@ class DummyControllerExample
 	public function getChannels($socketId, $channels = null)
 	{
 		/** @var IUser $user */
-		$user = SkeletonInit::skeleton(IUser::class);
+		$user = new User();
 		$user
 			->setName('current', 'user', 'name', 'with', 'any', 'args')
 			->setSocketId($socketId);

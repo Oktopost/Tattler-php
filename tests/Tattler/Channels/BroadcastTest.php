@@ -33,19 +33,10 @@ class BroadcastTest extends TestCase
     {
     	self::assertTrue($this->room->getName() === Broadcast::BROADCAST_NAME);
     }
-
-    public function test_should_allow_to_connect_any_user()
-    {
-    	self::assertTrue($this->room->allow(getDummyUser()));
-    }
-
-    public function test_can_not_deny_access()
-    {
-	    self::assertFalse($this->room->deny(getDummyUser()));
-    }
-
-    public function test_is_always_allowed()
-    {
-	    self::assertTrue($this->room->isAllowed(getDummyUser()));
-    }
+    
+    public function test_should_not_change_name()
+	{
+		$this->room->setName(uniqid());
+		self::assertSame(Broadcast::BROADCAST_NAME, $this->room->getName());
+	}
 }

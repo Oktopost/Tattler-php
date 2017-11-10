@@ -6,7 +6,7 @@ There are several types of storage, you can use any of them or implement your ow
 
 _note: class should implement [IDBDecorator interface](https://github.com/Oktopost/Tattler-php/blob/master/src/Tattler/Base/Decorators/IDBDecorator.php)_
 
-_note: If DB decorator is not configured, `Redis` decorator [will be used automatically](https://github.com/Oktopost/Tattler-php/blob/master/skeleton/Tattler/Base/Decorators.php)_
+_note: If DB decorator is not configured, `Redis` decorator [will be used automatically](https://github.com/Oktopost/Tattler-php/blob/master/src/Tattler/Decorators/DB/RedisDecorator.php)_
 
 _note: existing decorators may contain undocumented features. They will be added to documentation later. 
 Or they will be removed from code. Who knows._
@@ -19,7 +19,8 @@ start using decorator.
 $host = 'localhost';
 $port = 6379;
 $prefix = 'php-tattler';
-\Tattler\SkeletonInit::skeleton()->set(IDBDecorator::class, new RedisDecorator($host, $port, $prefix));
+
+new RedisDecorator($host, $port, $prefix);
 ```
 
 ## Squid
@@ -27,7 +28,7 @@ SquidDecorator used for storing data in mysql database. Install [Squid library](
 pass ObjectConnector and your tableName to decorator.
 
 ```php
-\Tattler\SkeletonInit::skeleton()->set(IDBDecorator::class, new SquidDecorator($objectConector, $tableName));
+new SquidDecorator($objectConector, $tableName);
 ```
 
 _note: Use [mysql.sql](https://github.com/Oktopost/Tattler-php/blob/master/db/mysql.sql) for creating table._
@@ -37,5 +38,5 @@ SquanchDecorator used for storing data in cache layer. That layer could be anywh
 [Squanch library](https://github.com/Oktopost/Squanch) and pass CachePlugin and bucket name to decorator.
 
 ```php
-\Tattler\SkeletonInit::skeleton()->set(IDBDecorator::class, new SquanchDecorator($cachePlugin, 'php-tattler'));
+new SquanchDecorator($cachePlugin, 'php-tattler');
 ```

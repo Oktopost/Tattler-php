@@ -2,17 +2,15 @@
 namespace Tattler\DAL;
 
 
-use Tattler\SkeletonInit;
-use Tattler\Objects\TattlerAccess;
-
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\DAL\ITattlerAccessDAO;
 use Tattler\Base\Decorators\IDBDecorator;
 
+use Tattler\Objects\TattlerAccess;
 
-/**
- * Class TattlerAccessDAO
- */
+use Tattler\Channels\Room;
+
+
 class TattlerAccessDAO implements ITattlerAccessDAO
 {
     private const DATA_TTL = 604800; // week
@@ -20,14 +18,11 @@ class TattlerAccessDAO implements ITattlerAccessDAO
 
     /** @var IDBDecorator $decorator */
     private $decorator;
-
-
-    /**
-     * TattlerAccessDAO constructor.
-     */
-    public function __construct()
+	
+	
+	public function setDBDecorator(IDBDecorator $dbDecorator): void
     {
-        $this->decorator = SkeletonInit::skeleton(IDBDecorator::class);
+        $this->decorator = $dbDecorator;
         $this->removeOld();
     }
 
@@ -74,7 +69,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
         foreach ($query as $item)
         {
             /** @var IRoom $room */
-            $room = SkeletonInit::skeleton(IRoom::class);
+            $room = new Room();
             $room->setName($item->Channel);
             $result[] = $room;
         }

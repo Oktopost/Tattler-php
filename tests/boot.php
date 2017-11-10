@@ -1,21 +1,28 @@
 <?php
-use Tattler\SkeletonInit;
+use Tattler\Channels\Room;
+use Tattler\Channels\User;
 
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\Channels\IUser;
 
-use Tattler\Base\Decorators\IDBDecorator;
-use Tattler\Base\Decorators\INetworkDecorator;
-
-use Skeleton\Type;
+use Tattler\Objects\TattlerConfig;
 
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
-SkeletonInit::skeleton()->set(IDBDecorator::class, Tests\Tattler\Decorators\DB\DummyDecorator::class, Type::Singleton);
-SkeletonInit::skeleton()->set(INetworkDecorator::class, Tests\Tattler\Decorators\Network\DummyDecorator::class);
-
+function getConfig(): TattlerConfig
+{
+	$result = new TattlerConfig();
+	$result->Namespace = 'Test';
+	$result->WsAddress = 'ws://localhost.domain.tld';
+	$result->ApiAddress = 'http://localhost.domain.tld';
+	$result->Secret = uniqid();
+	$result->DBDecorator = new \Tests\Tattler\Decorators\DB\DummyDecorator();
+	$result->NetworkDecorator = new Tests\Tattler\Decorators\Network\DummyDecorator();
+	
+	return $result;
+}
 
 /**
  * @return IUser
@@ -23,7 +30,7 @@ SkeletonInit::skeleton()->set(INetworkDecorator::class, Tests\Tattler\Decorators
 function getDummyUser()
 {
 	/** @var IUser $user */
-	$user = SkeletonInit::skeleton(IUser::class);
+	$user = new User();
 	$user->setName(uniqId(), uniqId(), uniqId());
 	
 	return $user;
@@ -35,6 +42,6 @@ function getDummyUser()
 function getDummyRoom()
 {
 	/** @var IRoom $result */
-	$result = SkeletonInit::skeleton(IRoom::class);
+	$result = new Room();
 	return $result;
 }

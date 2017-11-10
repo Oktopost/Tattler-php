@@ -2,6 +2,7 @@
 namespace Tattler\Base\Modules;
 
 
+use Tattler\Base\Channels\IRoom;
 use Tattler\Objects\TattlerConfig;
 use Tattler\Base\Channels\IChannel;
 use Tattler\Base\Channels\IUser;
@@ -11,7 +12,7 @@ use Tattler\Base\Objects\ITattlerMessage;
 /**
  * @skeleton
  */
-interface ITattler
+interface ITattlerModule
 {
     public const WS_PROTOCOL = 'ws:';
 	public const WSS_PROTOCOL = 'wss:';
@@ -21,7 +22,7 @@ interface ITattler
 	public const DEFAULT_SECURE_PORT = 443;
 
 
-    public function setConfig(TattlerConfig $config): ITattler;
+    public function setConfig(TattlerConfig $config): ITattlerModule;
     public function setConfigValue(string $key, $value): bool;
     public function getWsAddress(): string;
     public function getJWTToken(): string;
@@ -30,13 +31,17 @@ interface ITattler
     public function getDefaultChannels(IUser $user): array;
     public function getChannels(?array $filter = []): array;
     
-    public function setUser(IUser $user): ITattler;
+    public function setUser(IUser $user): ITattlerModule;
+	
+	public function allowAccess(IRoom $room, ?IUser $user = null): bool;
+	public function denyAccess(IRoom $room, ?IUser $user = null): bool;
+	public function isAllowed(IRoom $room, ?IUser $user = null): bool;
     
-    public function broadcast(): ITattler;
-    public function room(IChannel $room): ITattler;
-    public function user(IUser $user): ITattler;
+    public function broadcast(): ITattlerModule;
+    public function room(IChannel $room): ITattlerModule;
+    public function user(IUser $user): ITattlerModule;
 
-    public function message(ITattlerMessage $message): ITattler;
+    public function message(ITattlerMessage $message): ITattlerModule;
     
     public function say(): bool;
 }

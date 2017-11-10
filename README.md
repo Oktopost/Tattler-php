@@ -24,21 +24,19 @@ and then run `composer update`.
 ## Setup
 
 ```php
-\Tattler\SkeletonInit::skeleton()->set(IDBDecorator::class, new RedisDecorator());
-\Tattler\SkeletonInit::skeleton()->set(INetworkDecorator::class, CurlDecorator::class);
-
 $config = new TattlerConfig();
 $tattlerConfig->fromArray([
-        'WsAddress'      => 'TATTLER_WEBSOCKET_ADDRESS',
-        'ApiAddress'     => 'TATTLER_API_ADDRESS',
-        'Namespace'      => 'YOUR APPLICATION_NAME',
-        'Secret'         => 'TATTLER_SECRET',
-        'TokenTTL'       => 'USER_TOKEN_TTL'
+        'WsAddress'         => 'TATTLER_WEBSOCKET_ADDRESS',
+        'ApiAddress'        => 'TATTLER_API_ADDRESS',
+        'Namespace'         => 'YOUR APPLICATION_NAME',
+        'Secret'            => 'TATTLER_SECRET',
+        'TokenTTL'          => 'USER_TOKEN_TTL',
+        'DBDecorator'       => new RedisDecorator(),
+        'NetworkDecorator'  => new CurlDecorator()
 ]);
 
 /** @var ITattler::class $tattler */
-$tattler = \Tattler\SkeletonInit::skeleton(ITattler::class);
-$tattler->setConfig($tattlerConfig);
+$tattler = Tattler::getInstance($tattlerConfig);
 ```
 _note: for using redis db decorator you need to install [predis](https://github.com/nrk/predis)_
 
@@ -68,7 +66,7 @@ window.tattler.addHandler('myMessage', 'globalNamespace', function(data){
 Send payload to all users from php
 ```php
 /** var ITattlerMessage::class $message */
-$message = \Tattler\SkeletonInit::skeleton(ITattlerMessage::class);
+$message = new TattlerMessage();
 $message->setHandler('myMessage')->setNamespace('globalNamespace')->setPayload(['message' => 'Hello world']]);
 
 $tattler->message($message)->broadcast()->say();

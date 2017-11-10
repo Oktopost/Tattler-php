@@ -43,7 +43,8 @@ class UserTest extends TestCase
 	
 	public function test_setNameConverter_should_return_static()
 	{
-		$converter = function(...$data){
+		$converter = function()
+		{
 			return "i'm just dummy closure";
 		};
 		
@@ -59,21 +60,6 @@ class UserTest extends TestCase
 	public function test_should_return_valid_name()
 	{
 		self::assertEquals($this->userName, $this->user->getName());
-	}
-	
-	public function test_user_can_get_his_private_room_return_true()
-	{
-		self::assertTrue($this->user->allow($this->user));
-	}
-	
-	public function test_user_can_not_deny_access_to_his_private_room()
-	{
-		self::assertFalse($this->user->deny($this->user));
-	}
-	
-	public function test_user_always_allowed_to_his_private_room()
-	{
-		self::assertTrue($this->user->isAllowed($this->user));
 	}
 	
 	public function test_setSocketId_should_return_static()

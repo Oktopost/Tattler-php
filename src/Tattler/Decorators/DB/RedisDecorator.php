@@ -12,9 +12,6 @@ use Predis\Client;
 use ReflectionClass;
 
 
-/**
- * Class RedisDecorator
- */
 class RedisDecorator implements IDBDecorator
 {
 	/** @var Client */

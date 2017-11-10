@@ -24,7 +24,7 @@ class TattlerAccess extends LiteObject
             'Modified'  => LiteSetup::createString(),
             'UserToken' => LiteSetup::createString(),
             'Channel'   => LiteSetup::createString(),
-            'IsLocked'  => LiteSetup::createBool()
+            'IsLocked'  => LiteSetup::createBool(false)
         ];
     }
 
@@ -36,7 +36,7 @@ class TattlerAccess extends LiteObject
     {
         parent::__construct();
 
-        $now = (new \DateTime())->format('Y-m-d H:i:s');;
+        $now = (new \DateTime())->format('Y-m-d H:i:s');
         $this->Created = $now;
         $this->Modified = $now;
     }

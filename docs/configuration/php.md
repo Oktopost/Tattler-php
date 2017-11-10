@@ -4,16 +4,17 @@ First create TattlerConfig instance
 ```php
 $config = new TattlerConfig();
 $tattlerConfig->fromArray([
-        'WsAddress'      => 'TATTLER_WEBSOCKET_ADDRESS',
-        'ApiAddress'     => 'TATTLER_API_ADDRESS',
-        'Namespace'      => 'YOUR APPLICATION_NAME',
-        'Secret'         => 'TATTLER_SECRET',
-        'TokenTTL'       => 'USER_TOKEN_TTL'
+        'WsAddress'         => 'TATTLER_WEBSOCKET_ADDRESS',
+        'ApiAddress'        => 'TATTLER_API_ADDRESS',
+        'Namespace'         => 'YOUR APPLICATION_NAME',
+        'Secret'            => 'TATTLER_SECRET',
+        'TokenTTL'          => 'USER_TOKEN_TTL',
+        'DBDecorator'       => $dbDecorator, // optional
+        'NetworkDecorator'  => $networkDecorator // optional
 ]);
 
-/** @var ITattler::class $tattler */
-$tattler = \Tattler\SkeletonInit::skeleton(ITattler::class);
-$tattler->setConfig($tattlerConfig);
+/** @var ITattlerModule::class $tattler */
+$tattler = Tattler::getInstance($tattlerConfig);
 ```
 
 ```

@@ -5,7 +5,7 @@ Room (or channel) used to combine multiple users. It allows you to send same mes
 
 ```php
 /** @var IRoom $user */
-$room = \Tattler\SkeletonInit::skeleton(IRoom::class);
+$room = new Room();
 $room->setName('myRoomNumberOne');
 ```
 

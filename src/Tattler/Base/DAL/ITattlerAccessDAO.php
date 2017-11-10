@@ -2,6 +2,7 @@
 namespace Tattler\Base\DAL;
 
 
+use Tattler\Base\Decorators\IDBDecorator;
 use Tattler\Objects\TattlerAccess;
 
 
@@ -10,6 +11,7 @@ use Tattler\Objects\TattlerAccess;
  */
 interface ITattlerAccessDAO
 {
+	public function setDBDecorator(IDBDecorator $dbDecorator): void;
     public function allow(TattlerAccess $access): bool;
     public function deny(TattlerAccess $access): bool;
 	public function loadAllChannels(string $userToken, bool $unlock = true): array;

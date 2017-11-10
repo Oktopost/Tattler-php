@@ -2,9 +2,6 @@
 namespace Tattler\Base\Objects;
 
 
-/**
- * @skeleton
- */
 interface ITattlerMessage
 {
     public const DEFAULT_NAMESPACE = 'global';
