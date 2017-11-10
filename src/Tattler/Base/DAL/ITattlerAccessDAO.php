@@ -16,6 +16,8 @@ interface ITattlerAccessDAO
     public function deny(TattlerAccess $access): bool;
 	public function loadAllChannels(string $userToken, bool $unlock = true): array;
     public function loadAllChannelNames(string $userToken, bool $unlock = true): array;
+    
+    /** @deprecated  */
     public function lock(TattlerAccess $access): bool;
     public function exists(TattlerAccess $access): bool;
     public function removeOld(): bool;

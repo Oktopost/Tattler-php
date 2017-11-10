@@ -5,6 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 use Tattler\Base\Channels\IUser;
 use Tattler\Base\Channels\IChannel;
+use Tattler\Channels\User;
 
 
 class UserTest extends TestCase
@@ -78,5 +79,21 @@ class UserTest extends TestCase
 	{
 		self::expectException(\Exception::class);
 		$this->user->getSocketId();
+	}
+	
+	public function test_user_with_socketId_always_have_name()
+	{
+		$user = new User();
+		$user->setSocketId(uniqid());
+		
+		self::assertNotEmpty($user->getName());
+	}
+	
+	public function test_user_without_name_throws_exception()
+	{
+		$user = new User();
+		
+		self::expectException(\Exception::class);
+		$user->getName();		
 	}
 }

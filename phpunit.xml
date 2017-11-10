@@ -4,7 +4,6 @@
             <directory suffix=".php">./src/</directory>
             <exclude>
                 <directory>./src/Tattler/Decorators/</directory>
-                <file>./src/Tattler/SkeletonInit.php</file>
             </exclude>
         </whitelist>
     </filter>

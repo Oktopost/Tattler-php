@@ -158,11 +158,6 @@ class TattlerModule implements ITattlerModule
 		return true;
 	}
 	
-	public function getConfig()
-	{
-		return $this->config;
-	}
-	
 	public function getWsAddress(): string
 	{
 		return $this->config->WsAddress;

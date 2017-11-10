@@ -8,15 +8,19 @@ use Tattler\Base\Modules\ITattlerModule;
 use Tattler\Base\Channels\IChannel;
 use Tattler\Base\Objects\ITattlerMessage;
 use Tattler\Objects\TattlerMessage;
+use Tattler\Channels\Room;
+use Tattler\Channels\User;
 use Tattler\Channels\Broadcast;
 
 use PHPUnit\Framework\TestCase;
+use Tattler\TattlerScope;
 
 
 class TattlerTest extends TestCase
 {
 	/** @var ITattlerModule $tattler */
 	private $tattler;
+	private $instanceName;
 	
 	
 	/**
@@ -39,13 +43,29 @@ class TattlerTest extends TestCase
 	{
 		parent::setUp();
 		
-		$this->tattler = Tattler::getInstance(getConfig());
+		$this->instanceName = uniqid();
+		$this->tattler = Tattler::getInstance(getConfig(), $this->instanceName);
 	}
 	
 	
 	public function test_setConfig_should_return_static()
 	{
 		self::assertInstanceOf(ITattlerModule::class, $this->tattler->setConfig(getConfig()));
+	}
+	
+	public function test_loader_should_store_configuration()
+	{
+		self::assertInstanceOf(ITattlerModule::class, Tattler::load($this->instanceName));
+	}
+	
+	public function test_loader_should_return_null_for_unknown()
+	{
+		self::assertNull(Tattler::load(uniqid()));
+	}
+	
+	public function test_tattlerScope_contains_skeleton()
+	{
+		self::assertInstanceOf(\Skeleton\Skeleton::class, TattlerScope::skeleton());
 	}
 	
 	public function test_getWsAddress_should_return_WS_address()
@@ -124,6 +144,47 @@ class TattlerTest extends TestCase
 		{
 			self::assertTrue($value !== $room2->getName());
 		}
+	}
+	
+	public function test_allow_access_takes_current_user_by_default()
+	{
+		$user = getDummyUser();
+		$user->setSocketId(uniqid());
+		$this->tattler->setUser($user);
+		$room = new Room();
+		$room->setName(uniqid());
+		
+		self::assertTrue($this->tattler->allowAccess($room));
+	}
+	
+	public function test_deny_access_takes_current_user_by_default()
+	{
+		$user = getDummyUser();
+		$user->setSocketId(uniqid());
+		$this->tattler->setUser($user);
+		$room = new Room();
+		$room->setName(uniqid());
+		$this->tattler->allowAccess($room);
+		
+		self::assertTrue($this->tattler->isAllowed($room, $user));
+		self::assertTrue($this->tattler->denyAccess($room));
+		self::assertFalse($this->tattler->isAllowed($room, $user));
+	}
+	
+	public function test_isAllowed_takes_current_user_by_default()
+	{
+		$user = getDummyUser();
+		$user->setSocketId(uniqid());
+		$this->tattler->setUser($user);
+		$room = new Room();
+		$room->setName(uniqid());
+		
+		$this->tattler->allowAccess($room);
+		self::assertTrue($this->tattler->isAllowed($room));
+		
+		$this->tattler->setUser((new User())->setName(uniqid()));
+		
+		self::assertFalse($this->tattler->isAllowed($room));
 	}
 	
 	public function test_setUser_should_return_static()
