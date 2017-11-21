@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Oktopost/Tattler-php.svg)](https://travis-ci.org/Oktopost/Tattler-php)
 [![Coverage Status](https://coveralls.io/repos/github/Oktopost/Tattler-php/badge.svg?branch=master)](https://coveralls.io/github/Oktopost/Tattler-php?branch=master)
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Oktopost/Tattler-php/blob/master/LICENSE)
 
 Send async messages to your users using [Tattler](https://github.com/grohman/tattler)
 

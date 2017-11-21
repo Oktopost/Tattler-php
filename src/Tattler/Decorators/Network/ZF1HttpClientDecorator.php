@@ -3,6 +3,8 @@ namespace Tattler\Decorators\Network;
 
 
 use Tattler\Base\Decorators\INetworkDecorator;
+use Tattler\Exceptions\TattlerNetworkException;
+
 use Zend_Http_Client;
 
 
@@ -30,19 +32,24 @@ class ZF1HttpClientDecorator implements INetworkDecorator
 		} 
 		catch (\Exception $e) 
 		{
-			return false;
+			throw new TattlerNetworkException('Failed to send payload');
 		}
 		
+		$body = $this->client->getLastResponse()->getBody();
 		
 		if ($this->client->getLastResponse()->getStatus() == 200) {
-			$body = json_decode($this->client->getLastResponse()->getBody(), true);
+			$body = json_decode($body, true);
 			
 			if (isset($body['status']) && $body['status'] == 200) {
 				return true;
 			}
+			else
+			{
+				throw new TattlerNetworkException($body);
+			}
 		}
 		
-		return false;
+		throw new TattlerNetworkException($body);
 	}
 	
 	private function getHeaders()
@@ -66,11 +73,12 @@ class ZF1HttpClientDecorator implements INetworkDecorator
 		} 
 		catch (\Exception $e) 
 		{
-			return null;
+			throw new TattlerNetworkException('Failed to sync channels');
 		}
 		
-		if ($this->client->getLastResponse()->getStatus() != 200) {
-			return null;
+		if ($this->client->getLastResponse()->getStatus() != 200) 
+		{
+			throw new TattlerNetworkException($this->client->getLastResponse()->getBody());
 		}
 		
 		$body = json_decode($this->client->getLastResponse()->getBody(), true);

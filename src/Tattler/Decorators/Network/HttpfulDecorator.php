@@ -5,6 +5,7 @@ namespace Tattler\Decorators\Network;
 use Httpful\Mime;
 use Httpful\Request;
 use Tattler\Base\Decorators\INetworkDecorator;
+use Tattler\Exceptions\TattlerNetworkException;
 
 
 /**
@@ -23,11 +24,13 @@ class HttpfulDecorator implements INetworkDecorator
 		} 
 		catch (\Exception $e) 
 		{
-			return false;
+			throw new TattlerNetworkException('Failed to send payload');
 		}
 		
 		if ($result->hasErrors())
-			return false;
+		{
+			throw new TattlerNetworkException($result->raw_body);
+		}
 		
 		return true;
 	}
@@ -42,11 +45,13 @@ class HttpfulDecorator implements INetworkDecorator
 		} 
 		catch (\Exception $e) 
 		{
-			return null;
+			throw new TattlerNetworkException('Failed to sync channels');
 		}
 		
 		if ($result->hasErrors())
-			return null;
+		{
+			throw new TattlerNetworkException($result->raw_body);
+		}
 		
 		return $result->body->rooms;
 	}

@@ -3,6 +3,7 @@ namespace Tattler\Decorators\Network;
 
 
 use Tattler\Base\Decorators\INetworkDecorator;
+use Tattler\Exceptions\TattlerNetworkException;
 
 
 /**
@@ -36,9 +37,9 @@ class CurlDecorator implements INetworkDecorator
         {
             return json_decode($query)->status == 200;
         }
-        catch (\Exception $e)
+        catch (\Throwable $e)
         {
-            return false;
+            throw new TattlerNetworkException($query);
         }
     }
 
@@ -50,9 +51,9 @@ class CurlDecorator implements INetworkDecorator
         {
             return json_decode($query)->rooms;
         }
-        catch (\Exception $e)
+        catch (\Throwable $e)
         {
-            return null;
+			throw new TattlerNetworkException($query);
         }
     }
 }

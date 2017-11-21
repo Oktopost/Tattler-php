@@ -5,7 +5,9 @@ namespace Tattler\Decorators\Network;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+
 use Tattler\Base\Decorators\INetworkDecorator;
+use Tattler\Exceptions\TattlerNetworkException;
 
 
 /**
@@ -51,7 +53,7 @@ class GuzzleDecorator implements INetworkDecorator
             }
             catch(\Exception $e)
             {
-                return [];
+				throw new TattlerNetworkException($response->getBody()->getContents());
             }
         };
 
