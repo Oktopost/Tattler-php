@@ -36,7 +36,7 @@ $tattlerConfig->fromArray([
         'NetworkDecorator'  => new CurlDecorator()
 ]);
 
-/** @var ITattler::class $tattler */
+/** @var ITattlerModule::class $tattler */
 $tattler = Tattler::getInstance($tattlerConfig);
 ```
 _note: for using redis db decorator you need to install [predis](https://github.com/nrk/predis)_
