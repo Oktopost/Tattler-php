@@ -204,11 +204,14 @@
 						if (handlerExists(namespace, handler) === false) {
 							log('error', 'handler ' + handler + ' with namespace ' + namespace + ' not defined', data);
 						} else {
-							if (typeof data.payload === 'undefined') {
-								// backward compatibility to old version of Tattler backend
-								manufactory.handlers[namespace][handler](data);
-							} else {
-								manufactory.handlers[namespace][handler](data.payload);
+							for (var funcKey=0; funcKey<manufactory.handlers[namespace][handler].length; funcKey++)
+							{
+								if (typeof data.payload === 'undefined') {
+									// backward compatibility to old version of Tattler backend
+									manufactory.handlers[namespace][handler][funcKey](data);
+								} else {
+									manufactory.handlers[namespace][handler][funcKey](data.payload);
+								}
 							}
 						}
 					})
@@ -223,7 +226,7 @@
 			handlers: {
 				/** @namespace data.channel */
 				global: {
-					'console.log': function (data) {
+					'console.log': [function (data) {
 						if (typeof data.force !== 'undefined') {
 							console.warn(data);
 							return;
@@ -236,8 +239,8 @@
 						} else {
 							log('warn', 'remote', data.message);
 						}
-					},
-					'alert': function (data) {
+					}],
+					'alert': [function (data) {
 						var text;
 						if (typeof data.title !== 'undefined') {
 							text = data.title
@@ -251,8 +254,8 @@
 						text += data.message;
 						
 						alert(text);
-					},
-					'confirm': function (data) {
+					}],
+					'confirm': [function (data) {
 						if (confirm(data.message)) {
 							if (data.yes !== undefined && typeof data.yes === 'function') {
 								data.yes();
@@ -262,13 +265,13 @@
 								window[data.no]();
 							}
 						}
-					},
-					'addChannel': function (data) {
+					}],
+					'addChannel': [function (data) {
 						addChannel(data.channel, false);
-					},
-					'removeChannel': function (data) {
+					}],
+					'removeChannel': [function (data) {
 						removeChannel(data.channel);
-					}
+					}]
 				}
 			}
 		};
@@ -335,38 +338,30 @@
 			}
 		};
 		
-		var addHandler = function (event, namespace, fn, override) {
+		var addHandler = function (event, namespace, fn) {
 			if (typeof namespace === 'function') {
 				// backward compatibility with old handlers
 				fn = namespace;
 				namespace = 'global';
 			}
 			
-			if (handlerExists(namespace, event) === false) {
-				if (typeof manufactory.handlers[namespace] === 'undefined') {
-					manufactory.handlers[namespace] = {};
-				}
-				
-				manufactory.handlers[namespace][event] = fn;
-				
-				log('info', 'added handler for event «' + event + '» in namespace «' + namespace + '»');
+			
+			if (typeof manufactory.handlers[namespace] === 'undefined') {
+				manufactory.handlers[namespace] = {};
 			}
-			else
-			{
-				log('warn', 'failed to create for event «' + event + '» in «' + namespace + '»: already exists.');
-				
-				if (typeof override === 'boolean' && override === true)
-				{
-					removeHandler(event, namespace);
-					addHandler(event, namespace, fn);
-				}
+			
+			if (typeof manufactory.handlers[namespace][event] === 'undefined') {
+				manufactory.handlers[namespace][event] = [];
 			}
+			
+			manufactory.handlers[namespace][event].push(fn);
+			log('info', 'added handler for event «' + event + '» in namespace «' + namespace + '»');
 		};
 		
 		var removeHandler = function(event, namespace) {
 			if (typeof manufactory.handlers[namespace] !== 'undefined' && typeof manufactory.handlers[namespace][event] !== 'undefined')
 			{
-				log('info', 'removed handler for event «' + event + '» in namespace «' + namespace + '»');
+				log('info', 'removed handler(s) for event «' + event + '» in namespace «' + namespace + '»');
 				delete manufactory.handlers[namespace][event];
 			}
 			else
@@ -400,7 +395,7 @@
 					}
 				}
 				
-				console[type](args.join(' '));
+				window.console[type](args.join(' '));
 			}
 		};
 		
