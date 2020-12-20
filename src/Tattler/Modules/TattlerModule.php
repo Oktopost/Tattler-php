@@ -276,6 +276,7 @@ class TattlerModule implements ITattlerModule
 			
 			$tattlerBag = [
 				'tattlerUri' => $this->getApiAddress() . self::EMIT_ENDPOINT,
+				'timeout'	 => $this->config->Timeout,
 				'payload'    => [
 					'root'   => $this->config->Namespace,
 					'secret' => $this->config->Secret,

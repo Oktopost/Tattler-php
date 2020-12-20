@@ -18,6 +18,7 @@ class HttpfulDecorator implements INetworkDecorator
 		try 
 		{
 			$result = Request::post($tattlerBag['tattlerUri'])
+				->timeoutIn($tattlerBag['timeout'])
 				->body($tattlerBag['payload'])
 				->sendsAndExpectsType(Mime::JSON)
 				->send();

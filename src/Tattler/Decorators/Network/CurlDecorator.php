@@ -11,12 +11,14 @@ use Tattler\Exceptions\TattlerNetworkException;
  */
 class CurlDecorator implements INetworkDecorator
 {
-    private function getCurl(string $endpoint, string $payload)
+    private function getCurl(string $endpoint, string $payload, ?int $timeout = 5)
     {
         $ch = curl_init($endpoint);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 'Content-Type: application/json',
                 'Content-Length: ' . strlen($payload)]
@@ -31,11 +33,11 @@ class CurlDecorator implements INetworkDecorator
 
     public function sendPayload(array $tattlerBag): bool
     {
-        $query = $this->getCurl($tattlerBag['tattlerUri'], json_encode($tattlerBag['payload']));
+        $query = $this->getCurl($tattlerBag['tattlerUri'], json_encode($tattlerBag['payload']), $tattlerBag['timeout']);
 
         try
         {
-            return json_decode($query)->status == 200;
+            return (json_decode($query)->status ?? 0) == 200;
         }
         catch (\Throwable $e)
         {
@@ -49,7 +51,7 @@ class CurlDecorator implements INetworkDecorator
 
         try
         {
-            return json_decode($query)->rooms;
+            return (json_decode($query)->rooms ?? []);
         }
         catch (\Throwable $e)
         {

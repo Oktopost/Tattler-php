@@ -5,7 +5,7 @@ namespace Tattler\Decorators\DB;
 use Tattler\Base\Decorators\IDBDecorator;
 use Tattler\Objects\TattlerAccess;
 
-use Squid\Object\IObjectConnector;
+use Squid\Objects\IObjectConnector;
 
 
 class SquidDecorator implements IDBDecorator

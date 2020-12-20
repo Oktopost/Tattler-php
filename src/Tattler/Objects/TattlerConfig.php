@@ -15,6 +15,7 @@ use Objection\LiteObject;
  * @property string				$Namespace
  * @property string				$Secret
  * @property int				$TokenTTL
+ * @property int				$Timeout
  * @property IDBDecorator		$DBDecorator
  * @property INetworkDecorator	$NetworkDecorator
  */
@@ -31,6 +32,7 @@ class TattlerConfig extends LiteObject
 			'Namespace' 		=> LiteSetup::createString(),
 			'Secret'    		=> LiteSetup::createString(),
 			'TokenTTL'   		=> LiteSetup::createInt(60),
+			'Timeout'   		=> LiteSetup::createInt(5),
 			'DBDecorator'		=> LiteSetup::createInstanceOf(IDBDecorator::class),
 			'NetworkDecorator'	=> LiteSetup::createInstanceOf(INetworkDecorator::class)
 		];
