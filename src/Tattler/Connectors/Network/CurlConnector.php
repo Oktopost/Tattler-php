@@ -1,17 +1,14 @@
 <?php
-namespace Tattler\Decorators\Network;
+namespace Tattler\Connectors\Network;
 
 
-use Tattler\Base\Decorators\INetworkDecorator;
+use Tattler\Base\Connectors\INetworkConnector;
 use Tattler\Exceptions\TattlerNetworkException;
 
 
-/**
- * Class CurlDecorator
- */
-class CurlDecorator implements INetworkDecorator
+class CurlConnector implements INetworkConnector
 {
-    private function getCurl(string $endpoint, string $payload, ?int $timeout = 5)
+    private function getCurl(string $endpoint, string $payload, int $timeout = 10)
     {
         $ch = curl_init($endpoint);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -26,7 +23,7 @@ class CurlDecorator implements INetworkDecorator
 
         $query = curl_exec($ch);
 
-        curl_close($ch);
+		curl_close($ch);
 
         return $query;
     }

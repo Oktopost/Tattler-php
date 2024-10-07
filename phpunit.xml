@@ -3,7 +3,7 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/</directory>
             <exclude>
-                <directory>./src/Tattler/Decorators/</directory>
+                <directory>./src/Tattler/Connectors/</directory>
             </exclude>
         </whitelist>
     </filter>

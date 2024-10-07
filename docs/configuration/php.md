@@ -9,8 +9,8 @@ $tattlerConfig->fromArray([
         'Namespace'         => 'YOUR APPLICATION_NAME',
         'Secret'            => 'TATTLER_SECRET',
         'TokenTTL'          => 'USER_TOKEN_TTL',
-        'DBDecorator'       => $dbDecorator, // optional
-        'NetworkDecorator'  => $networkDecorator // optional
+        'DBConnector'       => $dbConnector, // optional
+        'NetworkConnector'  => $networkConnector // optional
 ]);
 
 /** @var ITattlerModule::class $tattler */

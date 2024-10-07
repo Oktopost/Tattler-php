@@ -1,17 +1,14 @@
 <?php
-namespace Tattler\Decorators\Network;
+namespace Tattler\Connectors\Network;
 
 
 use Httpful\Mime;
 use Httpful\Request;
-use Tattler\Base\Decorators\INetworkDecorator;
+use Tattler\Base\Connectors\INetworkConnector;
 use Tattler\Exceptions\TattlerNetworkException;
 
 
-/**
- * Class HttpfulDecorator
- */
-class HttpfulDecorator implements INetworkDecorator
+class HttpfulConnector implements INetworkConnector
 {
 	public function sendPayload(array $tattlerBag): bool
 	{

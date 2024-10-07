@@ -4,7 +4,7 @@ namespace Tattler\DAL;
 
 use Tattler\Base\Channels\IRoom;
 use Tattler\Base\DAL\ITattlerAccessDAO;
-use Tattler\Base\Decorators\IDBDecorator;
+use Tattler\Base\Connectors\IDBConnector;
 use Tattler\Channels\Room;
 use Tattler\Objects\TattlerAccess;
 
@@ -14,13 +14,13 @@ class TattlerAccessDAO implements ITattlerAccessDAO
 	private const DATA_TTL = 604800; // week
 	
 	
-	/** @var IDBDecorator $decorator */
-	private $decorator;
+	/** @var IDBConnector $connector */
+	private $connector;
 	
 	
-	public function setDBDecorator(IDBDecorator $dbDecorator): void
+	public function setDBConnector(IDBConnector $dbConnector): void
 	{
-		$this->decorator = $dbDecorator;
+		$this->connector = $dbConnector;
 		$this->removeOld();
 	}
 	
@@ -31,19 +31,19 @@ class TattlerAccessDAO implements ITattlerAccessDAO
 		
 		if ($exists)
 		{
-			$this->decorator->unlock($access);
+			$this->connector->unlock($access);
 			
-			return $this->decorator->updateAccessTTL($access, self::DATA_TTL);
+			return $this->connector->updateAccessTTL($access, self::DATA_TTL);
 		}
 		else
 		{
-			return $this->decorator->insertAccess($access, self::DATA_TTL);
+			return $this->connector->insertAccess($access, self::DATA_TTL);
 		}
 	}
 	
 	public function exists(TattlerAccess $access): bool
 	{
-		return $this->decorator->accessExists($access);
+		return $this->connector->accessExists($access);
 	}
 	
 	public function deny(TattlerAccess $access): bool
@@ -51,7 +51,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
 		if (!$this->exists($access))
 			return true;
 		
-		return $this->decorator->deleteAccess($access);
+		return $this->connector->deleteAccess($access);
 	}
 	
 	public function loadAllChannels(string $userToken, bool $unlock = true): array
@@ -59,7 +59,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
 		$result = [];
 		
 		/** @var TattlerAccess[] $query */
-		$query = $this->decorator->loadAllChannels($userToken, $unlock);
+		$query = $this->connector->loadAllChannels($userToken, $unlock);
 		
 		if (!$query)
 			return $result;
@@ -71,7 +71,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
 		{
 			if (strtotime($item->Modified) < $keepAliveAfter)
 			{
-				$this->decorator->deleteAccess($item);
+				$this->connector->deleteAccess($item);
 				continue;
 			}
 			
@@ -89,7 +89,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
 		$result = [];
 		
 		/** @var TattlerAccess[] $query */
-		$query = $this->decorator->loadAllChannels($userToken, $unlock);
+		$query = $this->connector->loadAllChannels($userToken, $unlock);
 		
 		if (!$query)
 			return $result;
@@ -100,7 +100,7 @@ class TattlerAccessDAO implements ITattlerAccessDAO
 		{
 			if (strtotime($item->Modified) < $keepAliveAfter)
 			{
-				$this->decorator->deleteAccess($item);
+				$this->connector->deleteAccess($item);
 				continue;
 			}
 			
@@ -112,11 +112,11 @@ class TattlerAccessDAO implements ITattlerAccessDAO
 	
 	public function lock(TattlerAccess $access): bool
 	{
-		return $this->decorator->lock($access);
+		return $this->connector->lock($access);
 	}
 	
 	public function removeOld(): bool
 	{
-		return $this->decorator->removeGarbage(self::DATA_TTL);
+		return $this->connector->removeGarbage(self::DATA_TTL);
 	}
 }

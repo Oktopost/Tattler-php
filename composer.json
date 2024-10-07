@@ -50,6 +50,7 @@
 		"oktopost/squanch": "Store users/channels tokens with Squanch client",
 		"oktopost/squid": "Store users/channels tokens in MySQL DB",
 		"predis/predis": "Store users/channels tokens in Redis DB",
+		"oktopost/gazelle": "Communicate with Tattler backend through gazzle (optional, by default CURL will be used)",
 		"guzzlehttp/guzzle": "Communicate with Tattler backend through guzzle (optional, by default CURL will be used)",
 		"nategood/httpful": "Communicate with Tattler backend through httpful (optional, by default CURL will be used)"
 	}

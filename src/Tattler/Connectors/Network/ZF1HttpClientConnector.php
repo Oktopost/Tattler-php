@@ -1,14 +1,14 @@
 <?php
-namespace Tattler\Decorators\Network;
+namespace Tattler\Connectors\Network;
 
 
-use Tattler\Base\Decorators\INetworkDecorator;
+use Tattler\Base\Connectors\INetworkConnector;
 use Tattler\Exceptions\TattlerNetworkException;
 
 use Zend_Http_Client;
 
 
-class ZF1HttpClientDecorator implements INetworkDecorator
+class ZF1HttpClientConnector implements INetworkConnector
 {
 	/** @var Zend_Http_Client */
 	private $client;

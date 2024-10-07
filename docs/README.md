@@ -1,8 +1,8 @@
 # Tattler php client
 
 * Configuration
-* * [Set DB decorator](configuration/db.md)
-* * [Set network decorator](configuration/network.md)
+* * [Set DB connectot](configuration/db.md)
+* * [Set network connector](configuration/network.md)
 * * [Initializing tattler php](configuration/php.md)
 * * [Initializing tattler.js](configuration/js.md)
 

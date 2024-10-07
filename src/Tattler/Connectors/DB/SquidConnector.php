@@ -1,14 +1,14 @@
 <?php
-namespace Tattler\Decorators\DB;
+namespace Tattler\Connectors\DB;
 
 
-use Tattler\Base\Decorators\IDBDecorator;
+use Tattler\Base\Connectors\IDBConnector;
 use Tattler\Objects\TattlerAccess;
 
 use Squid\Objects\IObjectConnector;
 
 
-class SquidDecorator implements IDBDecorator
+class SquidConnector implements IDBConnector
 {
     /** @var IObjectConnector */
     private $db;

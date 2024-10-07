@@ -1,14 +1,14 @@
 <?php
-namespace Tattler\Decorators\DB;
+namespace Tattler\Connectors\DB;
 
 
 use Tattler\Objects\TattlerAccess;
-use Tattler\Base\Decorators\IDBDecorator;
+use Tattler\Base\Connectors\IDBConnector;
 
 use Squanch\Base\ICachePlugin;
 
 
-class SquanchDecorator implements IDBDecorator
+class SquanchConnector implements IDBConnector
 {
 	/** @var ICachePlugin */
 	private $client;

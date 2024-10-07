@@ -2,8 +2,8 @@
 namespace Tattler\Objects;
 
 
-use Tattler\Base\Decorators\IDBDecorator;
-use Tattler\Base\Decorators\INetworkDecorator;
+use Tattler\Base\Connectors\IDBConnector;
+use Tattler\Base\Connectors\INetworkConnector;
 
 use Objection\LiteSetup;
 use Objection\LiteObject;
@@ -16,8 +16,8 @@ use Objection\LiteObject;
  * @property string				$Secret
  * @property int				$TokenTTL
  * @property int				$Timeout
- * @property IDBDecorator		$DBDecorator
- * @property INetworkDecorator	$NetworkDecorator
+ * @property IDBConnector		$DBConnector
+ * @property INetworkConnector	$NetworkConnector
  */
 class TattlerConfig extends LiteObject
 {
@@ -33,8 +33,8 @@ class TattlerConfig extends LiteObject
 			'Secret'    		=> LiteSetup::createString(),
 			'TokenTTL'   		=> LiteSetup::createInt(60),
 			'Timeout'   		=> LiteSetup::createInt(5),
-			'DBDecorator'		=> LiteSetup::createInstanceOf(IDBDecorator::class),
-			'NetworkDecorator'	=> LiteSetup::createInstanceOf(INetworkDecorator::class)
+			'DBConnector'		=> LiteSetup::createInstanceOf(IDBConnector::class),
+			'NetworkConnector'	=> LiteSetup::createInstanceOf(INetworkConnector::class)
 		];
 	}
 	

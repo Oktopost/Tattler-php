@@ -10,13 +10,14 @@ use Tattler\Base\Objects\ITattlerMessage;
 
 use Tattler\Channels\Broadcast;
 
+use Tattler\Connectors\Network\GazelleConnector;
 use Tattler\Objects\TattlerAccess;
 use Tattler\Objects\TattlerConfig;
 
-use Tattler\Decorators\DB\RedisDecorator;
-use Tattler\Decorators\Network\CurlDecorator;
-use Tattler\Decorators\Network\GuzzleDecorator;
-use Tattler\Decorators\Network\HttpfulDecorator;
+use Tattler\Connectors\DB\RedisConnector;
+use Tattler\Connectors\Network\CurlConnector;
+use Tattler\Connectors\Network\GuzzleConnector;
+use Tattler\Connectors\Network\HttpfulConnector;
 
 use Firebase\JWT\JWT;
 
@@ -29,7 +30,8 @@ class TattlerModule implements ITattlerModule
 	private const ROOMS_ENDPOINT = '/tattler/rooms';
 	private const EMIT_ENDPOINT  = '/tattler/emit';
 
-	private const GUZZLE_LIBRARY		= 'GuzzleHttp\Client';
+	private const GAZZELE_LIBRARY 		= 'Gazelle\Gazelle';
+	private const GUZZLE_LIBRARY  		= 'GuzzleHttp\Client';
 	private const HTTPFUL_LIBRARY		= 'Httpful\Request';
 	private const CURL_FUNCTION			= 'curl_init';
 	
@@ -75,7 +77,7 @@ class TattlerModule implements ITattlerModule
 			]
 		];
 		
-		return $this->config->NetworkDecorator->syncChannels($tattlerBag) ?? [];
+		return $this->config->NetworkConnector->syncChannels($tattlerBag) ?? [];
 	}
 	
 	private function reset(): void
@@ -85,46 +87,49 @@ class TattlerModule implements ITattlerModule
 		return;
 	}
 	
-	private function setDefaultNetworkDecorator(): void
+	private function setDefaultNetworkConnector(): void
 	{
-		if (class_exists(self::GUZZLE_LIBRARY))
+		if (class_exists(self::GAZZELE_LIBRARY))
 		{
-			$this->config->NetworkDecorator = new GuzzleDecorator();
+			$this->config->NetworkConnector = new GazelleConnector();
+		}
+		else if (class_exists(self::GUZZLE_LIBRARY))
+		{
+			$this->config->NetworkConnector = new GuzzleConnector();
 		}
 		else if (class_exists(self::HTTPFUL_LIBRARY))
 		{
-			$this->config->NetworkDecorator = new HttpfulDecorator();
+			$this->config->NetworkConnector = new HttpfulConnector();
 		}
 		else if (function_exists(self::CURL_FUNCTION))
 		{
-			$this->config->NetworkDecorator = new CurlDecorator();
+			$this->config->NetworkConnector = new CurlConnector();
 		}
 		else
 		{
-			throw new \Exception('Failed to set default Network decorator');
+			throw new \Exception('Failed to set default Network connector');
 		}
 	}
 	
-	private function setDefaultDBDecorator(): void
+	private function setDefaultDBConnector(): void
 	{
-		
 		if (!class_exists(self::PREDIS_LIBRARY))
 		{
-			throw new \Exception('Failed to set default DB decorator');
+			throw new \Exception('Failed to set default DB connector');
 		}
 		
-		$this->config->DBDecorator = new RedisDecorator();
+		$this->config->DBConnector = new RedisConnector();
 	}
 	
 	private function afterSetConfig(): void
 	{
-		if (!$this->config->DBDecorator)
-			$this->setDefaultDBDecorator();
+		if (!$this->config->DBConnector)
+			$this->setDefaultDBConnector();
 		
-		if (!$this->config->NetworkDecorator)
-			$this->setDefaultNetworkDecorator();
+		if (!$this->config->NetworkConnector)
+			$this->setDefaultNetworkConnector();
 		
-		$this->accessDAO->setDBDecorator($this->config->DBDecorator);
+		$this->accessDAO->setDBConnector($this->config->DBConnector);
 	}
 	
 	private function getAccessObject($roomName, $userToken)
@@ -185,8 +190,7 @@ class TattlerModule implements ITattlerModule
 	public function getDefaultChannels(IUser $user): array
 	{
 		return [
-			$user->getName(),
-			Broadcast::BROADCAST_NAME
+			$user->getName()
 		];
 	}
 	
@@ -285,7 +289,7 @@ class TattlerModule implements ITattlerModule
 				],
 			];
 			
-			$result = $this->config->NetworkDecorator->sendPayload($tattlerBag) & $result;
+			$result = $this->config->NetworkConnector->sendPayload($tattlerBag) & $result;
 		}
 		
 		return (bool)$result;

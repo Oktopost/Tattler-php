@@ -18,8 +18,8 @@ function getConfig(): TattlerConfig
 	$result->WsAddress = 'ws://localhost.domain.tld';
 	$result->ApiAddress = 'http://localhost.domain.tld';
 	$result->Secret = uniqid();
-	$result->DBDecorator = new \Tests\Tattler\Decorators\DB\DummyDecorator();
-	$result->NetworkDecorator = new Tests\Tattler\Decorators\Network\DummyDecorator();
+	$result->DBConnector = new \Tests\Tattler\Connectors\DB\DummyConnector();
+	$result->NetworkConnector = new Tests\Tattler\Connectors\Network\DummyConnector();
 	
 	return $result;
 }

@@ -1,9 +1,9 @@
 <?php
-namespace Tattler\Decorators\DB;
+namespace Tattler\Connectors\DB;
 
 
 use Tattler\Objects\TattlerAccess;
-use Tattler\Base\Decorators\IDBDecorator;
+use Tattler\Base\Connectors\IDBConnector;
 
 use Objection\Mapper;
 use Objection\LiteObject;
@@ -12,7 +12,7 @@ use Predis\Client;
 use ReflectionClass;
 
 
-class RedisDecorator implements IDBDecorator
+class RedisConnector implements IDBConnector
 {
 	/** @var Client */
     private $client;

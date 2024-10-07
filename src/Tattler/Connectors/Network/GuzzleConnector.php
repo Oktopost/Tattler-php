@@ -1,27 +1,21 @@
 <?php
-namespace Tattler\Decorators\Network;
+namespace Tattler\Connectors\Network;
 
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
-use Tattler\Base\Decorators\INetworkDecorator;
+use Tattler\Base\Connectors\INetworkConnector;
 use Tattler\Exceptions\TattlerNetworkException;
 
 
-/**
- * Class GuzzleDecorator
- */
-class GuzzleDecorator implements INetworkDecorator
+class GuzzleConnector implements INetworkConnector
 {
     /** @var Client $client */
     private $client;
 
 
-    /**
-     * GuzzleDecorator constructor.
-     */
     public function __construct()
     {
         $this->client = new Client(['headers' => ['Content-Type' => 'application/json']]);
